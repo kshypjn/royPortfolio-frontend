@@ -30,7 +30,7 @@ function ArticleCardList({ articles, publicationName }) {
         >
           {article.image && article.image.url && (
             <img
-              src={`${process.env.NEXT_PUBLIC_STRAPI_API_URL}${article.image.url}`}
+              src={article.image.url}
               alt={article.Title || 'Article Image'}
               className="w-full h-40 object-cover rounded-md mb-2 border border-gray-200"
               loading="lazy"
@@ -136,7 +136,7 @@ export default function WorkGrid({ publicationGroups }) {
                   {article.image && article.image.url && (
                     <div className="mb-3 w-full aspect-[4/3] relative rounded-md overflow-hidden bg-gray-50">
                       <img
-                        src={`${process.env.NEXT_PUBLIC_STRAPI_API_URL}${article.image.url}`}
+                        src={article.image.url}
                         alt={article.Title || 'Article Image'}
                         className="object-cover w-full h-full rounded-md"
                         loading="lazy"

@@ -1,0 +1,36 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- UPDATED Article model (no createdAt/updatedAt) ---
+model Article {
+  id            String    @id @default(uuid()) @map("id") // Primary key, auto-generated UUID
+  title         String // String type for article title
+  url           String    @unique // String type for URL, must be unique
+  publication   String // String for publication name
+  thumbnailUrl  String? // Optional string for thumbnail URL (the '?' means it can be null)
+  publishedDate DateTime @map("publishedDate") // Date and time, maps to 'publishedDate' column in DB
+  tags          String[] // Array of strings for tags (maps to text[] in PostgreSQL)
+  status        String? // Optional string for article status (e.g., 'Draft', 'Published')
+
+  // This line maps the Prisma model name "Article" to your actual database table name "Articles"
+  @@map("Articles")
+}
+model AboutPage {
+  id                 String    @id @default(uuid()) // Unique ID for the About page entry
+  introduction       String    @map("introduction_text") // "Hello, I'm Aditya!"
+  mainContentJson    Json?     @map("main_content_json") // Main descriptive text (rich text/blocks JSON)
+  ctaText            String?   @map("cta_text") // "REACH OUT TO ME"
+  ctaLink            String?   @map("cta_link") // The URL for the CTA button
+  sectionsJson       Json?     @map("sections_json") // Array of sections (Work, Education, etc., with rich text descriptions)
+  profileImageUrl    String?   @map("profile_image_url") // Full URL for the profile picture
+  linkedinUrl        String?   // Optional: Your LinkedIn profile URL
+  twitterUrl         String?   // Optional: Your Twitter profile URL
+}

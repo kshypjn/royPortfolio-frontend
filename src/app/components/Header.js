@@ -1,5 +1,5 @@
 'use client';
-import { FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { FaLinkedin } from 'react-icons/fa';
 import HamburgerMenu from './HamburgerMenu';
 import Link from 'next/link';
 
@@ -15,11 +15,13 @@ export default function Header() {
         Aditya Roy
       </span>
       <div className="flex items-center gap-4">
-        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+        <a href="https://www.linkedin.com/in/aditya-anurag-roy-868409214/?originalSubdomain=in" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
           <FaLinkedin className="w-6 h-6 text-black hover:text-blue-700 transition-colors" />
         </a>
-        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-          <FaTwitter className="w-6 h-6 text-black hover:text-blue-500 transition-colors" />
+        <a href="https://x.com/adiroy_notkapur" target="_blank" rel="noopener noreferrer" aria-label="X">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-black hover:text-[#1da1f2] transition-colors">
+            <path d="M17.53 3H21L13.47 12.19L22 21H15.66L10.61 15.49L4.97 21H1L9.04 11.27L0.75 3H7.24L11.77 8.04L17.53 3ZM16.34 19H18.19L6.52 4.98H4.56L16.34 19Z" fill="currentColor"/>
+          </svg>
         </a>
       </div>
       <style jsx global>{`
