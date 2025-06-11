@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function TabbedArticles({ publications, articles }) {
   const [activeTab, setActiveTab] = useState(publications[0]);
@@ -38,10 +39,14 @@ export default function TabbedArticles({ publications, articles }) {
             {filtered.map((article) => (
               <li key={article.id} className="flex flex-col gap-1 p-0">
                 {article.image && article.image.url && (
-                  <img
-                    src={`${process.env.NEXT_PUBLIC_STRAPI_API_URL}${article.image.url}`}
+                  <Image
+                    src={article.image.url}
                     alt={article.Title || 'Article Image'}
-                    className="mb-2 w-28 h-20 object-cover rounded-md border border-gray-200"
+                    width={640}
+                    height={240}
+                    className="w-full h-40 object-cover rounded-md mb-2 border border-gray-200"
+                    style={{ objectFit: "cover" }}
+                    loading="lazy"
                   />
                 )}
                 <a
