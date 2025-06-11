@@ -1,12 +1,22 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route"; // Adjust path if needed
+import { authOptions } from "../../auth/[...nextauth]/route"; 
+import { createClient } from '@supabase/supabase-js';
 
 const prisma = new PrismaClient();
 
 export async function PUT(request, { params }) {
   const session = await getServerSession(authOptions);
+
+
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.error("Supabase environment variables not found in API route.");
+    return NextResponse.json({ message: 'Supabase credentials missing' }, { status: 500 });
+  }
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
   // 1. Authentication/Authorization Check
   if (!session) {
