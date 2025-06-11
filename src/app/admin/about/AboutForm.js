@@ -126,7 +126,7 @@ export default function AboutForm({ initialData }) {
           required
         ></textarea>
         {!isJsonValid.mainContentJson && (
-          <p className="text-red-500 text-xs mt-1">Invalid JSON format. Please ensure it's a valid JSON array.</p>
+          <p className="text-red-500 text-xs mt-1">Invalid JSON format. Please ensure it&apos;s a valid JSON array.</p>
         )}
         <div className="mt-2 p-2 border border-blue-200 rounded-md bg-blue-50 text-sm">
             <p className="font-semibold text-blue-800 mb-1">Preview Main Content:</p>
@@ -172,7 +172,7 @@ export default function AboutForm({ initialData }) {
           className={`mt-1 block w-full border ${isJsonValid.sectionsJson ? 'border-gray-300' : 'border-red-500'} rounded-md shadow-sm p-2 font-mono text-xs`}
         ></textarea>
         {!isJsonValid.sectionsJson && (
-          <p className="text-red-500 text-xs mt-1">Invalid JSON format. Please ensure it's a valid JSON array.</p>
+          <p className="text-red-500 text-xs mt-1">Invalid JSON format. Please ensure it&apos;s a valid JSON array.</p>
         )}
          <div className="mt-2 p-2 border border-blue-200 rounded-md bg-blue-50 text-sm">
             <p className="font-semibold text-blue-800 mb-1">Preview Sections:</p>
