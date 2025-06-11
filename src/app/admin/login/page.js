@@ -1,4 +1,4 @@
-"use client"; // This component must be a Client Component
+"use client"; 
 
 import { useState, useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
