@@ -55,6 +55,11 @@ export default function AdminLayout({ children }) {
                 Manage Articles
               </Link>
             </li>
+            <li className="mb-4">
+              <Link href="/admin/about" className="block text-gray-300 hover:text-white">
+              Edit About Me Page
+              </Link>
+            </li>
             {/* Add more admin links here as needed */}
             {/* Example: Users, Settings, etc. */}
           </ul>

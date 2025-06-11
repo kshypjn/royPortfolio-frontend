@@ -9,6 +9,7 @@ export default function AdminDashboardPage() {
       <p className="text-gray-500 text-sm mt-2">
         Go to &quot;Manage Articles&quot; in the sidebar to view and manage your content.
       </p>
+      
     </div>
   );
 } 
