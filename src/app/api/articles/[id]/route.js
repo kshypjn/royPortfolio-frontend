@@ -6,6 +6,16 @@ import { createClient } from '@supabase/supabase-js';
 
 const prisma = new PrismaClient();
 
+// Initialize Supabase client outside the route handler
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Missing Supabase environment variables. Please check your .env file and Vercel environment variables.');
+}
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
 console.log(">> SUPABASE_URL:", process.env.SUPABASE_URL);
 console.log(">> SUPABASE_ANON_KEY:", process.env.SUPABASE_ANON_KEY);
 
@@ -13,15 +23,6 @@ export async function PUT(request, { params }) {
   console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
   console.log("SUPABASE_ANON_KEY:", process.env.SUPABASE_ANON_KEY);
   const session = await getServerSession(authOptions);
-
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
-  console.log({ supabaseUrl, supabaseAnonKey });
-  if (!supabaseUrl || !supabaseAnonKey) {
-    console.error("Supabase environment variables not found in API route.");
-    return NextResponse.json({ message: 'Supabase credentials missing' }, { status: 500 });
-  }
-  const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
   if (!session) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -55,7 +56,6 @@ export async function PUT(request, { params }) {
             return NextResponse.json({ message: 'Invalid publishedDate format' }, { status: 400 });
         }
     }
-
 
     // 2. Update Article using Prisma
     const updatedArticle = await prisma.article.update({
