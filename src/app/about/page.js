@@ -1,4 +1,4 @@
-import prisma from '../../../lib/prisma';
+import prisma from '../../lib/prisma';
 import AboutPageClient from './AboutPageClient';
 
 export const revalidate = 7200; 
