@@ -6,7 +6,7 @@ import { createClient } from "@supabase/supabase-js"; // Import Supabase client
 // Initialize a Supabase client for server-side auth calls
 // It uses the service_role key to directly interact with auth.users
 const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY, // Use the service role key here!
   {
     auth: {
