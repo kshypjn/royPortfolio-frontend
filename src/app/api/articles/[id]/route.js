@@ -12,6 +12,7 @@ export async function PUT(request, { params }) {
 
   const supabaseUrl = process.env.SUPABASE_URL;
   const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+  console.log({ supabaseUrl, supabaseAnonKey });
   if (!supabaseUrl || !supabaseAnonKey) {
     console.error("Supabase environment variables not found in API route.");
     return NextResponse.json({ message: 'Supabase credentials missing' }, { status: 500 });
