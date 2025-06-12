@@ -2,9 +2,7 @@ import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 import Image from 'next/image'; // Import Next.js Image component
 import Link from 'next/link';   // Import Next.js Link component for navigation
 import WorkGrid from './components/WorkGrid';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../../lib/prisma';
 
 export const revalidate = 60; // Optional: ISR
 

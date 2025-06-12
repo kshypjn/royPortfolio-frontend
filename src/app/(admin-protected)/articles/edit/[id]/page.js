@@ -1,10 +1,8 @@
-import { PrismaClient } from '@prisma/client';
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../api/auth/[...nextauth]/route";
 import { redirect, notFound } from 'next/navigation';
 import ArticleEditForm from '../../../../../components/ArticleEditForm'; // Adjust path if needed
-
-const prisma = new PrismaClient();
+import prisma from '../../../../../lib/prisma';
 
 export default async function EditArticlePage({ params }) {
   const session = await getServerSession(authOptions);

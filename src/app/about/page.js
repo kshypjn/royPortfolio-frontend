@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../../lib/prisma';
 import AboutPageClient from './AboutPageClient';
-
-const prisma = new PrismaClient();
 
 export const revalidate = 7200; 
 
