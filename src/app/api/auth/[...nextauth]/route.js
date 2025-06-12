@@ -1,13 +1,11 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google"; // Import Google Provider
-import { createClient } from "@supabase/supabase-js"; // Import Supabase client
+import GoogleProvider from "next-auth/providers/google"; 
+import { createClient } from "@supabase/supabase-js"; 
 
-// Initialize a Supabase client for server-side auth calls
-// It uses the service_role key to directly interact with auth.users
 const supabaseAdmin = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY, // Use the service role key here!
+  process.env.SUPABASE_SERVICE_ROLE_KEY, 
   {
     auth: {
       autoRefreshToken: false,

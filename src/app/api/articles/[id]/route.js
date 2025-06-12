@@ -6,9 +6,13 @@ import { createClient } from '@supabase/supabase-js';
 
 const prisma = new PrismaClient();
 
-export async function PUT(request, { params }) {
-  const session = await getServerSession(authOptions);
+console.log(">> SUPABASE_URL:", process.env.SUPABASE_URL);
+console.log(">> SUPABASE_ANON_KEY:", process.env.SUPABASE_ANON_KEY);
 
+export async function PUT(request, { params }) {
+  console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
+  console.log("SUPABASE_ANON_KEY:", process.env.SUPABASE_ANON_KEY);
+  const session = await getServerSession(authOptions);
 
   const supabaseUrl = process.env.SUPABASE_URL;
   const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
@@ -18,7 +22,6 @@ export async function PUT(request, { params }) {
     return NextResponse.json({ message: 'Supabase credentials missing' }, { status: 500 });
   }
   const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
 
   if (!session) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
