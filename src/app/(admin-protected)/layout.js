@@ -10,13 +10,14 @@ export default function AdminLayout({ children }) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  // Get the allowed emails from our environment variable and convert them to a lowercase array
-  const allowedEmails = process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAILS
-    ? process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAILS.split(',').map(email => email.trim().toLowerCase())
-    : [];
-
   useEffect(() => {
     if (status === "loading") return;
+
+    // Get the allowed emails from our environment variable and convert them to a lowercase array
+    const allowedEmails = process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAILS
+      ? process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAILS.split(',').map(email => email.trim().toLowerCase())
+      : [];
+
     if (!session) {
       router.push("/admin/login");
     } else {
@@ -25,7 +26,7 @@ export default function AdminLayout({ children }) {
         signOut({ callbackUrl: "/admin/login?error=AccessDenied" });
       }
     }
-  }, [session, status, router, allowedEmails]);
+  }, [session, status, router]);
 
   if (status === "loading" || !session) {
     // You can render a loading spinner or a simple message here while auth status is determined
