@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 
 export default async function EditArticlePage({ params }) {
   const session = await getServerSession(authOptions);
-
+ 
   // 1. Authentication Check
   if (!session) {
     redirect("/admin/login");
