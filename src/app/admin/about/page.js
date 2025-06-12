@@ -1,9 +1,19 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 import prisma from '../../../lib/prisma';
 import AboutForm from './AboutForm';
 
 export const revalidate = 0;
 
 export default async function AdminAboutPage() {
+  const session = await getServerSession(authOptions);
+  const allowedEmails = process.env.ALLOWED_ADMIN_EMAILS?.split(',').map(e => e.trim());
+
+  if (!session || !allowedEmails?.includes(session.user.email)) {
+    redirect("/admin/login");
+  }
+
   let initialData = null;
   let error = null;
 

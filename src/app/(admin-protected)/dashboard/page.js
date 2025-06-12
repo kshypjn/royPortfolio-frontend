@@ -1,11 +1,26 @@
-"use client";
 
 // frontend/src/app/(admin-protected)/page.js
 // This will be your simplified dashboard page
 
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
-export default function AdminDashboardPage() {
+export default async function AdminDashboardPage() {
+  const session = await getServerSession(authOptions);
+  const allowedEmails = process.env.ALLOWED_ADMIN_EMAILS?.split(',').map(e => e.trim());
+
+  // Not logged in? Redirect to login
+  if (!session) {
+    redirect("/admin/login");
+  }
+
+  // Not an allowed admin? Redirect to login
+  if (!allowedEmails?.includes(session.user.email)) {
+    redirect("/admin/login");
+  }
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-md text-center">
       <h2 className="text-3xl font-bold text-gray-800 mb-4">Welcome to Your Admin Panel!</h2>

@@ -6,9 +6,10 @@ import prisma from '../../../../../lib/prisma';
 
 export default async function EditArticlePage({ params }) {
   const session = await getServerSession(authOptions);
- 
-  // 1. Authentication Check
-  if (!session) {
+  const allowedEmails = process.env.ALLOWED_ADMIN_EMAILS?.split(',').map(e => e.trim());
+
+  // 1. Authentication & Authorization Check
+  if (!session || !allowedEmails?.includes(session.user.email)) {
     redirect("/admin/login");
   }
 
