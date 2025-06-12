@@ -1,4 +1,3 @@
-
 // frontend/src/app/(admin-protected)/page.js
 // This will be your simplified dashboard page
 
@@ -6,6 +5,7 @@ import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import DashboardActions from "./DashboardActions";
 
 export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions);
@@ -25,7 +25,7 @@ export default async function AdminDashboardPage() {
     <div className="bg-white p-6 rounded-lg shadow-md text-center">
       <h2 className="text-3xl font-bold text-gray-800 mb-4">Welcome to Your Admin Panel!</h2>
       <p className="text-gray-600 text-lg mb-6">Use the links below to manage your content.</p>
-      <div className="flex flex-col gap-4 items-center">
+      <div className="flex flex-col gap-4 items-center mb-6">
         <Link href="/admin/about" className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 w-64 text-center">
           Edit About Me
         </Link>
@@ -36,6 +36,7 @@ export default async function AdminDashboardPage() {
           Add New Article
         </Link>
       </div>
+      <DashboardActions />
     </div>
   );
 } 
