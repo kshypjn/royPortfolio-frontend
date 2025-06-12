@@ -10,6 +10,10 @@ export default async function Home() {
   let articles = [];
   let error = null;
 
+  // TEMPORARY DEBUGGING LOG: Verify DATABASE_URL from Vercel's perspective
+  console.log("Vercel Runtime DATABASE_URL (first 30 chars):", process.env.DATABASE_URL?.substring(0, 30));
+  console.log("Vercel Runtime DATABASE_URL length:", process.env.DATABASE_URL?.length);
+
   try {
     const fetchedArticles = await prisma.article.findMany({
       where: { status: 'Published' },
@@ -51,8 +55,11 @@ export default async function Home() {
       a.publicationName.localeCompare(b.publicationName)
     );
   } catch (e) {
-    console.error("Error fetching articles:", e);
+    // CRITICAL: Log the full error object here!
+    console.error("Error fetching articles FROM VERCEL:", e);
     error = "Failed to load articles. Please check your database connection and RLS policies.";
+    // Optionally, for advanced debugging, you could also expose more of the error message to the UI
+    // For now, let's just focus on the logs.
   }
 
   if (error) {
@@ -60,6 +67,8 @@ export default async function Home() {
       <div className="container mx-auto p-4 text-red-500">
         <h1 className="text-4xl font-bold mb-8">Featured Work</h1>
         <p>{error}</p>
+        {/* Optional: Display more specific error for debugging */}
+        {/* <p>Details: {e?.message || e?.name || "Unknown error"}</p> */}
       </div>
     );
   }
