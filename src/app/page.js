@@ -62,6 +62,7 @@ export default async function Home() {
     // For now, let's just focus on the logs.
   }
 
+  
   if (error) {
     return (
       <div className="container mx-auto p-4 text-red-500">
