@@ -10,15 +10,15 @@ export async function PUT(request, { params }) {
   const session = await getServerSession(authOptions);
 
 
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URLL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!supabaseUrl || !supabaseAnonKey) {
     console.error("Supabase environment variables not found in API route.");
     return NextResponse.json({ message: 'Supabase credentials missing' }, { status: 500 });
   }
   const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-  // 1. Authentication/Authorization Check
+
   if (!session) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
