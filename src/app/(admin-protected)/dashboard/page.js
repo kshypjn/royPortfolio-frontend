@@ -16,9 +16,9 @@ export default async function AdminDashboardPage() {
     redirect("/admin/login");
   }
 
-  // Not an allowed admin? Redirect to login
+  // Not an allowed admin? Redirect to login with error
   if (!allowedEmails?.includes(session.user.email)) {
-    redirect("/admin/login");
+    redirect("/admin/login?error=AccessDenied");
   }
 
   return (

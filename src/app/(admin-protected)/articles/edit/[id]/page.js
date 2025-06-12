@@ -10,7 +10,7 @@ export default async function EditArticlePage({ params }) {
 
   // 1. Authentication & Authorization Check
   if (!session || !allowedEmails?.includes(session.user.email)) {
-    redirect("/admin/login");
+    redirect("/admin/login?error=AccessDenied");
   }
 
   const articleId = params.id;

@@ -11,7 +11,7 @@ export default async function AdminAboutPage() {
   const allowedEmails = process.env.ALLOWED_ADMIN_EMAILS?.split(',').map(e => e.trim());
 
   if (!session || !allowedEmails?.includes(session.user.email)) {
-    redirect("/admin/login");
+    redirect("/admin/login?error=AccessDenied");
   }
 
   let initialData = null;
