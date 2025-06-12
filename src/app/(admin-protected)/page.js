@@ -1,3 +1,5 @@
+"use client";
+
 // frontend/src/app/(admin-protected)/page.js
 // This will be your simplified dashboard page
 
