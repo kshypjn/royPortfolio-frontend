@@ -2,7 +2,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Raleway, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Header from './components/Header';
-import Sidebar from './components/Sidebar';
 import { Providers } from "./providers";
 
 const geistSans = Geist({
@@ -101,7 +100,6 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${raleway.variable} ${playfair.variable}`}>
       <body className="antialiased bg-white text-black min-h-screen">
         <Providers>
-          <Sidebar />
           <Header />
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {children}

@@ -65,18 +65,18 @@ export default function HamburgerMenu() {
 
         <nav className="flex flex-1 flex-col items-start px-8 pt-24 gap-8">
           <Link 
-            href="/" 
-            className={`text-2xl font-bold tracking-widest text-black sidebar-underline${pathname === '/' ? ' sidebar-underline-active' : ''}`}
-            onClick={() => setOpen(false)}
-          >
-            HOME
-          </Link>
-          <Link 
             href="/about" 
             className={`text-2xl font-bold tracking-widest text-black sidebar-underline${pathname === '/about' ? ' sidebar-underline-active' : ''}`}
             onClick={() => setOpen(false)}
           >
-            ABOUT ME
+            ABOUT
+          </Link>
+          <Link 
+            href="/work" 
+            className={`text-2xl font-bold tracking-widest text-black sidebar-underline${pathname === '/work' ? ' sidebar-underline-active' : ''}`}
+            onClick={() => setOpen(false)}
+          >
+            WORK
           </Link>
         </nav>
       </div>
