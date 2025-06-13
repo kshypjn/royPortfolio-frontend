@@ -5,17 +5,10 @@ import HamburgerMenu from './HamburgerMenu';
 
 export default function Header() {
   return (
-    <header className="w-full flex items-center justify-between px-6 py-8 bg-transparent">
-      <div className="sm:hidden flex items-center">
-        <HamburgerMenu />
-      </div>
-      <div className="w-16 hidden sm:block"></div>
-      
-      <span className="text-2xl sm:text-4xl font-bold font-serif text-black mb-2 md:mb-0 text-center md:text-left">
-        Aditya Anurag Roy
-      </span>
-      <div className="flex items-center gap-4">
-        <nav className="hidden md:flex space-x-4">
+    <header className="w-full flex items-center justify-between px-4 py-6 bg-transparent">
+      <div className="flex items-center gap-6 w-full">
+        <span className="text-l sm:text-4xl font-bold font-serif text-black text-left whitespace-nowrap">Aditya Anurag Roy</span>
+        <nav className="hidden md:flex space-x-6 font-serif text-base">
           <Link href="/about" className="text-black hover:text-gray-600 transition-colors">About</Link>
           <Link href="/work" className="text-black hover:text-gray-600 transition-colors">Work</Link>
           <a href="https://www.linkedin.com/in/aditya-anurag-roy-868409214/?originalSubdomain=in" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
@@ -27,6 +20,9 @@ export default function Header() {
             </svg>
           </a>
         </nav>
+        <div className="flex-1 flex justify-end md:hidden">
+          <HamburgerMenu />
+        </div>
       </div>
       <style jsx global>{`
         @keyframes fade-in-down {

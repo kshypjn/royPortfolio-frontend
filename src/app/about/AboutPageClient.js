@@ -82,7 +82,13 @@ export default function AboutPageClient({ aboutMe }) {
           )}
           {/* CTA Section */}
           {CTAtext && CTAlink && (
-            <div className="mt-1 flex justify-center">
+            <div className="mt-1 flex justify-center gap-4">
+              <Link
+                href="/work"
+                className="inline-block px-5 py-2 bg-white text-black rounded-md font-semibold shadow border border-black text-sm tracking-wide transition-all duration-200 hover:bg-black hover:text-white hover:shadow-2xl hover:-translate-y-1 focus:bg-black focus:text-white"
+              >
+                My Work
+              </Link>
               <a
                 href={CTAlink}
                 target="_blank"
