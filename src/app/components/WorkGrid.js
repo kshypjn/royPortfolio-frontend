@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import ArticleCard from './ArticleCard';
 
 // Locale-agnostic date formatter to avoid hydration errors
 function formatDate(dateString) {
@@ -106,79 +105,15 @@ export default function WorkGrid({ publicationGroups }) {
           </select>
         </div>
       </div>
-
-      {/* Mobile: Publication sections with horizontal scroll */}
-      <div className="md:hidden">
-        {publicationGroups.map(({ publicationName, articles }) => (
-          <section key={publicationName} className="w-full max-w-7xl mx-auto mb-8">
-            <h2 className="text-xl font-semibold mb-2 font-serif text-black">
-              {publicationName}
-            </h2>
-            <div className="w-full overflow-x-auto">
-              <div className="flex space-x-4 pb-4">
-                {articles.map((article) => (
-                  <div key={article.id} className="flex-none w-64">
-                    <ArticleCard article={article} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        ))}
-      </div>
-
-      {/* Desktop: All sections open, grid layout */}
-      <div className="hidden md:block">
-        {filteredGroups.map(({ publicationName, articles }) => (
-          <section key={publicationName} className="w-full max-w-7xl mx-auto mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-6 font-serif text-black border-b border-gray-200 pb-2">
-              {publicationName}
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {articles.map((article) => (
-                <div
-                  key={article.id}
-                  className="flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow p-4 h-full group"
-                >
-                  {article.image && article.image.url && (
-                    <div className="mb-3 w-full aspect-[4/3] relative rounded-md overflow-hidden bg-gray-50">
-                      <img
-                        src={article.image.url}
-                        alt={article.Title || 'Article Image'}
-                        className="object-cover w-full h-full rounded-md"
-                        loading="lazy"
-                      />
-                    </div>
-                  )}
-                  <a
-                    href={article.URL || "#"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-lg sm:text-xl font-[var(--font-raleway)] font-semibold mb-2 underline-offset-4 group-hover:underline group-focus:underline transition-colors group-hover:text-[#b48a2f] group-focus:text-[#b48a2f]"
-                  >
-                    {article.Title}
-                  </a>
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    {article.tags &&
-                      article.tags.length > 0 &&
-                      article.tags.map((tag) => (
-                        <span
-                          key={tag.id}
-                          className="bg-black/90 text-white text-[10px] font-sans uppercase px-3 py-1 rounded-full tracking-widest"
-                        >
-                          {tag.name}
-                        </span>
-                      ))}
-                  </div>
-                  <div className="text-xs font-mono text-gray-500 mt-auto">
-                    {article.PublicationDate && formatDate(article.PublicationDate)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        ))}
-      </div>
+      {/* All screen sizes: horizontal scroller */}
+      {filteredGroups.map(({ publicationName, articles }) => (
+        <section key={publicationName} className="w-full max-w-7xl mx-auto mb-8">
+          <h2 className="text-xl md:text-2xl font-semibold mb-2 font-serif text-black">
+            {publicationName}
+          </h2>
+          <ArticleCardList articles={articles} publicationName={publicationName} />
+        </section>
+      ))}
     </main>
   );
 } 
