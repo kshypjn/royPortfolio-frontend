@@ -35,11 +35,15 @@ const playfair = Playfair_Display({
 
 export const metadata = {
   title: {
-    default: 'Aditya Roy - Journalism, Media & Economics Portfolio',
-    template: '%s | Aditya Roy Portfolio',
+    default: 'Aditya Anurag Roy | Portfolio',
+    template: '%s | Aditya Anurag Roy Portfolio',
   },
-  description: 'Aditya Roy is a journalism, media, and economics student showcasing his writing portfolio, investigative journalism, and media analysis work.',
+  description: 'Portfolio website of Aditya Anurag Roy, showcasing his work and projects.',
   keywords: [
+    'Aditya Anurag Roy',
+    'Portfolio',
+    'Web Development',
+    'Projects',
     'Aditya Roy',
     'Journalism Portfolio',
     'Media Studies',
@@ -57,21 +61,21 @@ export const metadata = {
     'Writer',
     'Researcher',
   ],
-  authors: [{ name: 'Aditya Roy' }],
-  creator: 'Aditya Roy',
-  publisher: 'Aditya Roy',
+  authors: [{ name: 'Aditya Anurag Roy' }],
+  creator: 'Aditya Anurag Roy',
+  publisher: 'Aditya Anurag Roy',
   openGraph: {
-    title: 'Aditya Roy - Journalism, Media & Economics Portfolio',
-    description: 'Aditya Roy is a journalism, media, and economics student showcasing his writing portfolio, investigative journalism, and media analysis work.',
-    siteName: 'Aditya Roy Portfolio',
+    title: 'Aditya Anurag Roy | Portfolio',
+    description: 'Portfolio website of Aditya Anurag Roy, showcasing his work and projects.',
+    siteName: 'Aditya Anurag Roy Portfolio',
     images: [],
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Aditya Roy - Journalism, Media & Economics Portfolio',
-    description: 'Aditya Roy is a journalism, media, and economics student showcasing his writing portfolio, investigative journalism, and media analysis work.',
+    title: 'Aditya Anurag Roy | Portfolio',
+    description: 'Portfolio website of Aditya Anurag Roy, showcasing his work and projects.',
     images: [],
   },
   robots: {
