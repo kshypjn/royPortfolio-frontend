@@ -3,6 +3,7 @@ import Image from 'next/image'; // Import Next.js Image component
 import Link from 'next/link';   // Import Next.js Link component for navigation
 import WorkGrid from './components/WorkGrid';
 import prisma from '../lib/prisma';
+import Footer from './components/Footer';
 
 export const revalidate = 60; // Optional: ISR
 
@@ -68,11 +69,15 @@ export default async function Home() {
       <div className="container mx-auto p-4 text-red-500">
         <h1 className="text-4xl font-bold mb-8">Featured Work</h1>
         <p>{error}</p>
-        {/* Optional: Display more specific error for debugging */}
-        {/* <p>Details: {e?.message || e?.name || "Unknown error"}</p> */}
+        <Footer />
       </div>
     );
   }
 
-  return <WorkGrid publicationGroups={articles} />;
+  return (
+    <>
+      <WorkGrid publicationGroups={articles} />
+      <Footer />
+    </>
+  );
 }
