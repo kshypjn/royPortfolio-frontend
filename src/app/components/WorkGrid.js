@@ -16,7 +16,7 @@ function formatDate(dateString) {
 function ArticleCardList({ articles, publicationName }) {
   return (
     <div
-      className="flex gap-4 overflow-x-auto scroll-snap-x scroll-px-4 pb-4 md:grid md:grid-cols-3 md:gap-8 md:overflow-x-visible md:scroll-snap-type-none"
+      className="flex gap-4 overflow-x-auto scroll-snap-x scroll-px-4 pb-4"
       aria-label={`Articles from ${publicationName}`}
       style={{ WebkitOverflowScrolling: 'touch' }}
     >
@@ -26,7 +26,7 @@ function ArticleCardList({ articles, publicationName }) {
           href={article.URL || "#"}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow p-3 min-h-[44px] group focus:outline-none focus:ring-2 focus:ring-black/10 cursor-pointer flex-shrink-0 w-[80vw] max-w-xs scroll-snap-align-start md:w-auto md:max-w-none"
+          className="flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow p-3 min-h-[44px] group focus:outline-none focus:ring-2 focus:ring-black/10 cursor-pointer flex-shrink-0 w-[80vw] max-w-xs scroll-snap-align-start"
           style={{ scrollSnapAlign: 'start' }}
         >
           {article.image && article.image.url && (
@@ -59,20 +59,18 @@ function ArticleCardList({ articles, publicationName }) {
         </a>
       ))}
       <style jsx global>{`
-        @media (max-width: 767px) {
-          .scroll-snap-x {
-            scroll-snap-type: x mandatory;
-          }
-          .scroll-snap-align-start {
-            scroll-snap-align: start;
-          }
-          .flex::-webkit-scrollbar {
-            display: none;
-          }
-          .flex {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-          }
+        .scroll-snap-x {
+          scroll-snap-type: x mandatory;
+        }
+        .scroll-snap-align-start {
+          scroll-snap-align: start;
+        }
+        .flex::-webkit-scrollbar {
+          display: none;
+        }
+        .flex {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}</style>
     </div>
