@@ -108,7 +108,7 @@ export default function WorkGrid({ publicationGroups }) {
       {/* All screen sizes: horizontal scroller */}
       {filteredGroups.map(({ publicationName, articles }) => (
         <section key={publicationName} className="w-full max-w-7xl mx-auto mb-8">
-          <h2 className="text-xl md:text-2xl font-semibold mb-2 font-serif text-black">
+          <h2 className="text-xl md:text-2xl font-semibold mb-2 font-[Georgia] text-black">
             {publicationName}
           </h2>
           <ArticleCardList articles={articles} publicationName={publicationName} />
