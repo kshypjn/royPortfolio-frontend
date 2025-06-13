@@ -1,13 +1,16 @@
 'use client';
 import { FaLinkedin } from 'react-icons/fa';
-import HamburgerMenu from './HamburgerMenu';
 import Link from 'next/link';
 
 export default function Header() {
   return (
     <header className="w-full flex items-center justify-between px-6 py-8 bg-transparent">
       <div className="sm:hidden flex items-center">
-        <HamburgerMenu />
+        <button className="md:hidden" onClick={() => setSidebarOpen(true)} aria-label="Open sidebar">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
       </div>
       <div className="w-16 hidden sm:block"></div>
       
@@ -23,6 +26,10 @@ export default function Header() {
             <path d="M17.53 3H21L13.47 12.19L22 21H15.66L10.61 15.49L4.97 21H1L9.04 11.27L0.75 3H7.24L11.77 8.04L17.53 3ZM16.34 19H18.19L6.52 4.98H4.56L16.34 19Z" fill="currentColor"/>
           </svg>
         </a>
+        <nav className="hidden md:flex space-x-4">
+          <Link href="/about" className="text-black hover:text-gray-600 transition-colors">About</Link>
+          <Link href="/" className="text-black hover:text-gray-600 transition-colors">Work</Link>
+        </nav>
       </div>
       <style jsx global>{`
         @keyframes fade-in-down {
