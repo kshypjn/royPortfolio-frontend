@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import ArticleCard from './ArticleCard';
 
 // Locale-agnostic date formatter to avoid hydration errors
 function formatDate(dateString) {
@@ -115,7 +116,15 @@ export default function WorkGrid({ publicationGroups }) {
             <h2 className="text-xl font-semibold mb-2 font-serif text-black">
               {publicationName}
             </h2>
-            <ArticleCardList articles={articles} publicationName={publicationName} />
+            <div className="w-full overflow-x-auto">
+              <div className="flex space-x-4 pb-4">
+                {articles.map((article) => (
+                  <div key={article.id} className="flex-none w-64">
+                    <ArticleCard article={article} />
+                  </div>
+                ))}
+              </div>
+            </div>
           </section>
         ))}
       </div>
