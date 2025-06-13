@@ -89,3 +89,7 @@ body {
   width: 100%;
   background: gold;
 }
+
+footer {
+  font-family: var(--font-playfair), serif;
+}
