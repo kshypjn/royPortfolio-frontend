@@ -11,7 +11,7 @@ export default function Header() {
       </div>
       <div className="w-16 hidden sm:block"></div>
       
-      <span className="text-3xl font-bold tracking-tight animate-fade-in-down text-black text-center flex-1 font-[var(--font-playfair)]">
+      <span className="text-3xl sm:text-4xl font-bold font-serif text-black mb-2 md:mb-0 text-center md:text-left">
         Aditya Anurag Roy
       </span>
       <div className="flex items-center gap-4">
