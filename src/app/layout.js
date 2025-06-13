@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import { Raleway, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
@@ -13,6 +14,20 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+  display: 'swap',
+  preload: true,
+});
+
+const raleway = Raleway({
+  variable: "--font-raleway",
+  subsets: ["latin"],
+  display: 'swap',
+  preload: true,
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
   display: 'swap',
   preload: true,
@@ -79,7 +94,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${raleway.variable} ${playfair.variable}`}>
       <body className="antialiased bg-white text-black min-h-screen">
         <Providers>
           <Sidebar />

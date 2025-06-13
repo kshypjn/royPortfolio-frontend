@@ -37,7 +37,7 @@ function ArticleCardList({ articles, publicationName }) {
             />
           )}
           <div className="flex flex-col flex-1 justify-between">
-            <h3 className="text-lg font-serif font-semibold mb-1 group-hover:underline group-focus:underline transition-colors group-hover:text-[#b48a2f] group-focus:text-[#b48a2f]">
+            <h3 className="text-lg font-[var(--font-raleway)] font-semibold mb-1 group-hover:underline group-focus:underline transition-colors group-hover:text-[#b48a2f] group-focus:text-[#b48a2f]">
               {article.Title}
             </h3>
             <div className="flex flex-wrap gap-2 mb-1">
@@ -147,7 +147,7 @@ export default function WorkGrid({ publicationGroups }) {
                     href={article.URL || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-lg sm:text-xl font-serif font-semibold mb-2 underline-offset-4 group-hover:underline group-focus:underline transition-colors group-hover:text-[#b48a2f] group-focus:text-[#b48a2f]"
+                    className="text-lg sm:text-xl font-[var(--font-raleway)] font-semibold mb-2 underline-offset-4 group-hover:underline group-focus:underline transition-colors group-hover:text-[#b48a2f] group-focus:text-[#b48a2f]"
                   >
                     {article.Title}
                   </a>

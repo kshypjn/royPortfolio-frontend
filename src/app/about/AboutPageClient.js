@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 import Image from "next/image";
 import Link from "next/link";
+import Footer from '../components/Footer';
 
 export default function AboutPageClient({ aboutMe }) {
   // Data structure expected from page.js:
@@ -125,6 +126,7 @@ export default function AboutPageClient({ aboutMe }) {
           animation: crazy-wobble 0.8s cubic-bezier(.36,.07,.19,.97) both;
         }
       `}</style>
+      <Footer />
     </main>
   );
 } 
