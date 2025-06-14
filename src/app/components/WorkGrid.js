@@ -85,7 +85,7 @@ export default function WorkGrid({ publicationGroups }) {
     : publicationGroups.filter(group => group.publicationName === selectedPublication);
 
   return (
-    <main className="flex flex-col gap-6 py-8 px-2 sm:px-6 md:px-12 bg-white">
+    <main className="flex flex-col gap-6 pt-8 pb-4 px-2 sm:px-6 md:px-12 bg-white">
       {/* Heading and Filter Row */}
       <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between mb-2">
         <h1 className="text-3xl sm:text-4xl font-bold font-serif text-black mb-2 md:mb-0 text-center md:text-left">
