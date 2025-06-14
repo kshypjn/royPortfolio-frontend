@@ -27,7 +27,7 @@ export default function AboutPageClient({ aboutMe }) {
 
   return (
     <main className="bg-white min-h-screen flex flex-col items-center py-10 px-2 sm:px-0">
-      <div className="mb-4 w-full sm:max-w-4xl sm:bg-white sm:rounded-2xl sm:shadow-xl sm:border sm:border-gray-100 sm:p-12 flex flex-col sm:flex-row gap-0 sm:gap-12 relative p-0">
+      <div className="mb-12 w-full sm:max-w-4xl sm:bg-white sm:rounded-2xl sm:shadow-xl sm:border sm:border-gray-100 sm:p-12 flex flex-col sm:flex-row gap-0 sm:gap-12 relative p-0">
         {/* Left: Text Content */}
         <div className="flex-1 flex flex-col justify-center">
           {/* About Me Heading */}
