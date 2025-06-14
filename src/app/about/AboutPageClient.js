@@ -74,7 +74,11 @@ export default function AboutPageClient({ aboutMe }) {
               <div className="mb-8">
                 {filteredSections.map((section, idx) => (
                   <div key={idx} className="mb-6">
-                    {section.description && <BlocksRenderer content={section.description} />}
+                    {section.description && (
+                      <div className="font-serif">
+                        <BlocksRenderer content={section.description} />
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

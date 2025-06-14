@@ -8,7 +8,7 @@ export default function Header() {
   const pathname = usePathname();
   return (
     <header className="w-full flex items-center justify-between px-4 py-6 bg-transparent">
-      <span className="text-2xl sm:text-4xl font-bold font-serif text-black text-left whitespace-nowrap">Aditya Anurag Roy</span>
+      <span className="text-2xl sm:text-4xl font-bold font-serif text-black text-left whitespace-nowrap animate-fade-in-down">Aditya Anurag Roy</span>
       <nav className="hidden md:flex items-center space-x-8">
         <Link
           href="/about"
