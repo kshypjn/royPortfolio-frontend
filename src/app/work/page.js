@@ -56,7 +56,7 @@ export default async function WorkPage() {
   if (error) {
     return (
       <div className="container mx-auto p-4 text-red-500">
-        <h1 className="text-4xl font-bold mb-8">Featured Work</h1>
+        <h1 className="text-4xl font-bold mb-4">Featured Work</h1>
         <p>{error}</p>
         <Footer />
       </div>

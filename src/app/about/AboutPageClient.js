@@ -27,7 +27,7 @@ export default function AboutPageClient({ aboutMe }) {
 
   return (
     <main className="bg-white min-h-screen flex flex-col items-center py-10 px-2 sm:px-0">
-      <div className="mb-12 w-full sm:max-w-4xl sm:bg-white sm:rounded-2xl sm:shadow-xl sm:border sm:border-gray-100 sm:p-12 flex flex-col sm:flex-row gap-0 sm:gap-12 relative p-0">
+      <div className="mb-8 w-full sm:max-w-4xl sm:bg-white sm:rounded-2xl sm:shadow-xl sm:border sm:border-gray-100 sm:p-12 flex flex-col sm:flex-row gap-0 sm:gap-12 relative p-0">
         {/* Left: Text Content */}
         <div className="flex-1 flex flex-col justify-center">
           {/* About Me Heading */}
@@ -87,7 +87,7 @@ export default function AboutPageClient({ aboutMe }) {
                 href="/work"
                 className="cta-btn"
               >
-                MY WORK
+                <span>MY WORK</span>
               </Link>
               <a
                 href={CTAlink}
@@ -95,7 +95,7 @@ export default function AboutPageClient({ aboutMe }) {
                 rel="noopener noreferrer"
                 className="cta-btn"
               >
-                {CTAtext}
+                <span>{CTAtext}</span>
               </a>
             </div>
           )}
@@ -145,15 +145,16 @@ export default function AboutPageClient({ aboutMe }) {
           box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
           overflow: hidden;
           transition: color 0.3s cubic-bezier(.4,0,.2,1), border-color 0.3s, box-shadow 0.3s, transform 0.2s;
-          z-index: 1;
+          z-index: 0;
         }
         .cta-btn::before {
           content: '';
           position: absolute;
-          left: 0; top: 0; bottom: 0;
+          left: 0; top: 0; right: 0; bottom: 0;
           width: 0%;
+          height: 100%;
           background: #111;
-          z-index: 0;
+          z-index: 1;
           transition: width 0.35s cubic-bezier(.4,0,.2,1);
         }
         .cta-btn:hover::before, .cta-btn:focus::before {
@@ -165,9 +166,9 @@ export default function AboutPageClient({ aboutMe }) {
           box-shadow: 0 4px 16px 0 rgba(0,0,0,0.10);
           transform: translateY(-2px) scale(1.03);
         }
-        .cta-btn span, .cta-btn {
+        .cta-btn span {
           position: relative;
-          z-index: 1;
+          z-index: 2;
         }
         .cta-btn {
           transition-property: color, background, border, box-shadow, transform;
@@ -179,4 +180,4 @@ export default function AboutPageClient({ aboutMe }) {
       <Footer />
     </main>
   );
-} 
+}
