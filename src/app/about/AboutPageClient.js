@@ -85,7 +85,7 @@ export default function AboutPageClient({ aboutMe }) {
             <div className="mt-1 flex justify-center gap-4">
               <Link
                 href="/work"
-                className="inline-block px-5 py-2 bg-white text-black rounded-md font-semibold shadow border border-black text-sm tracking-wide transition-all duration-200 hover:bg-black hover:text-white hover:shadow-2xl hover:-translate-y-1 focus:bg-black focus:text-white"
+                className="cta-btn"
               >
                 My Work
               </Link>
@@ -93,7 +93,7 @@ export default function AboutPageClient({ aboutMe }) {
                 href={CTAlink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block px-5 py-2 bg-white text-black rounded-md font-semibold shadow border border-black text-sm tracking-wide transition-all duration-200 hover:bg-black hover:text-white hover:shadow-2xl hover:-translate-y-1 focus:bg-black focus:text-white"
+                className="cta-btn"
               >
                 {CTAtext}
               </a>
@@ -130,6 +130,50 @@ export default function AboutPageClient({ aboutMe }) {
         }
         .crazy-hover:hover {
           animation: crazy-wobble 0.8s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        .cta-btn {
+          position: relative;
+          display: inline-block;
+          padding: 0.5rem 1.5rem;
+          font-family: var(--font-raleway), serif;
+          font-size: 1rem;
+          font-weight: 600;
+          border: 2px solid #111;
+          border-radius: 0.5rem;
+          background: #fff;
+          color: #111;
+          box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+          overflow: hidden;
+          transition: color 0.3s cubic-bezier(.4,0,.2,1), border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+          z-index: 1;
+        }
+        .cta-btn::before {
+          content: '';
+          position: absolute;
+          left: 0; top: 0; bottom: 0;
+          width: 0%;
+          background: #111;
+          z-index: 0;
+          transition: width 0.35s cubic-bezier(.4,0,.2,1);
+        }
+        .cta-btn:hover::before, .cta-btn:focus::before {
+          width: 100%;
+        }
+        .cta-btn:hover, .cta-btn:focus {
+          color: #fff;
+          border-color: #111;
+          box-shadow: 0 4px 16px 0 rgba(0,0,0,0.10);
+          transform: translateY(-2px) scale(1.03);
+        }
+        .cta-btn span, .cta-btn {
+          position: relative;
+          z-index: 1;
+        }
+        .cta-btn {
+          transition-property: color, background, border, box-shadow, transform;
+        }
+        .cta-btn:active {
+          transform: scale(0.98);
         }
       `}</style>
       <Footer />
