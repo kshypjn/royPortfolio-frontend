@@ -31,8 +31,8 @@ export default function AboutPageClient({ aboutMe }) {
         {/* Left: Text Content */}
         <div className="flex-1 flex flex-col justify-center">
           {/* About Me Heading */}
-          <h2 className="text-2xl sm:text-3xl font-serif font-semibold mb-2 tracking-wide text-gray-900">ABOUT ME</h2>
-          <hr className="border-t border-gray-300 mb-6 w-24" />
+          {/* <h2 className="text-2xl sm:text-3xl font-serif font-semibold mb-2 tracking-wide text-gray-900">ABOUT ME</h2>
+          <hr className="border-t border-gray-300 mb-6 w-24" /> */}
           {/* Introduction Heading */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold mb-4 text-gray-900 leading-tight">
             {introduction || "Hello, I'm [Your Name]!"}
