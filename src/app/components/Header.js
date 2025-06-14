@@ -59,15 +59,18 @@ export default function Header() {
           right: 0;
           bottom: -2px;
           height: 2px;
-          background: transparent;
-          transition: background 0.25s, width 0.25s;
-          width: 100%;
-        }
-        .nav-link:hover::after {
           background: #b48a2f;
+          width: 100%;
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+        }
+        .nav-link:hover::after,
+        .nav-link:focus::after {
+          transform: scaleX(1);
         }
         .nav-link-active::after {
-          background: #b48a2f;
+          transform: scaleX(1);
         }
       `}</style>
     </header>

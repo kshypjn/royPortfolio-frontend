@@ -87,7 +87,7 @@ export default function AboutPageClient({ aboutMe }) {
                 href="/work"
                 className="cta-btn"
               >
-                My Work
+                MY WORK
               </Link>
               <a
                 href={CTAlink}
@@ -160,7 +160,7 @@ export default function AboutPageClient({ aboutMe }) {
           width: 100%;
         }
         .cta-btn:hover, .cta-btn:focus {
-          color: #fff;
+          color: #fff !important;
           border-color: #111;
           box-shadow: 0 4px 16px 0 rgba(0,0,0,0.10);
           transform: translateY(-2px) scale(1.03);
