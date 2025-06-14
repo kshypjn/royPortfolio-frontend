@@ -2,14 +2,26 @@
 import { FaLinkedin } from 'react-icons/fa';
 import Link from 'next/link';
 import HamburgerMenu from './HamburgerMenu';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
+  const pathname = usePathname();
   return (
     <header className="w-full flex items-center justify-between px-4 py-6 bg-transparent">
       <span className="text-2xl sm:text-4xl font-bold font-serif text-black text-left whitespace-nowrap">Aditya Anurag Roy</span>
       <nav className="hidden md:flex items-center space-x-8">
-        <Link href="/about" className="font-serif font-bold text-lg text-black hover:text-gray-600 transition-colors">About</Link>
-        <Link href="/work" className="font-serif font-bold text-lg text-black hover:text-gray-600 transition-colors">Work</Link>
+        <Link
+          href="/about"
+          className={`nav-link${pathname === '/about' ? ' nav-link-active' : ''}`}
+        >
+          About
+        </Link>
+        <Link
+          href="/work"
+          className={`nav-link${pathname === '/work' ? ' nav-link-active' : ''}`}
+        >
+          Work
+        </Link>
         <a href="https://www.linkedin.com/in/aditya-anurag-roy-868409214/?originalSubdomain=in" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
           <FaLinkedin className="w-6 h-6 text-black hover:text-blue-700 transition-colors" />
         </a>
@@ -29,6 +41,33 @@ export default function Header() {
         }
         .animate-fade-in-down {
           animation: fade-in-down 1s cubic-bezier(0.4,0,0.2,1) both;
+        }
+        .nav-link {
+          position: relative;
+          font-family: var(--font-playfair), serif;
+          font-weight: bold;
+          font-size: 1.125rem;
+          color: #111;
+          text-decoration: none;
+          transition: color 0.2s;
+          padding-bottom: 2px;
+        }
+        .nav-link::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: -2px;
+          height: 2px;
+          background: transparent;
+          transition: background 0.25s, width 0.25s;
+          width: 100%;
+        }
+        .nav-link:hover::after {
+          background: #b48a2f;
+        }
+        .nav-link-active::after {
+          background: #b48a2f;
         }
       `}</style>
     </header>
