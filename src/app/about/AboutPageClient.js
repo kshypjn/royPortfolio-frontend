@@ -140,7 +140,7 @@ export default function AboutPageClient({ aboutMe }) {
           display: inline-block;
           padding: 0.5rem 1.5rem;
           font-family: var(--font-raleway), serif;
-          font-size: 1rem;
+          font-size: 0.75rem;
           font-weight: 600;
           border: 2px solid #111;
           border-radius: 0.5rem;
@@ -150,6 +150,11 @@ export default function AboutPageClient({ aboutMe }) {
           overflow: hidden;
           transition: color 0.3s cubic-bezier(.4,0,.2,1), border-color 0.3s, box-shadow 0.3s, transform 0.2s;
           z-index: 0;
+        }
+        @media (min-width: 640px) {
+          .cta-btn {
+            font-size: 0.875rem;
+          }
         }
         .cta-btn::before {
           content: '';
