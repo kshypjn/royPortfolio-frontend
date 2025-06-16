@@ -93,3 +93,11 @@ body {
 footer {
   font-family: var(--font-playfair), serif;
 }
+
+.wavy-underline {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 2px;
+  text-decoration-color: #b48a2f;
+}
