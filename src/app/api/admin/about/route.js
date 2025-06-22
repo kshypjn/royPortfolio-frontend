@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import prisma from '../../../../lib/prisma';
 
 // Handler for PATCH requests (to update the AboutPage)
@@ -27,6 +28,8 @@ export async function PATCH(request) {
         twitterUrl: body.twitterUrl,
       },
     });
+
+    revalidatePath('/about');
 
     return NextResponse.json(updatedAboutPage, { status: 200 });
 

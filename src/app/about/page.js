@@ -1,8 +1,6 @@
 import prisma from '../../lib/prisma';
 import AboutPageClient from './AboutPageClient';
 
-export const revalidate = 7200; 
-
 export const metadata = {
   title: 'About Aditya Roy',
   description: 'Learn more about Aditya Roy, a journalism, media, and economics student.',
