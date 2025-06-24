@@ -26,10 +26,8 @@ export default function AboutPageClient({ aboutMe }) {
 
   return (
     <main className="bg-white min-h-screen flex flex-col items-center py-10 px-2 sm:px-0">
-      <div className="mb-8 w-full sm:max-w-4xl sm:bg-white sm:rounded-2xl sm:shadow-xl sm:border sm:border-gray-100 sm:p-8 flex flex-col gap-0 sm:gap-12 relative p-0">
-        {/* Flex row: About text (left) and profile image (right) */}
+      <div className="mb-8 w-full sm:max-w-4xl sm:bg-white sm:rounded-2xl sm:shadow-xl sm:border sm:border-gray-100 sm:p-8 flex flex-col gap-0 sm:gap-4 relative p-0">
         <div className="w-full flex flex-col sm:flex-row gap-8 items-start">
-          {/* Left: Text Content */}
           <div className="flex-1 flex flex-col justify-center">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold mb-4 text-gray-900 leading-tight">
               {introduction || "Hello, I'm Aditya!"}
