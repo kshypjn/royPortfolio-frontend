@@ -4,6 +4,7 @@ import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 import Image from "next/image";
 import Link from "next/link";
 import Footer from '../components/Footer';
+import SlateRenderer from '../components/SlateRenderer';
 
 export default function AboutPageClient({ aboutMe }) {
  
@@ -11,7 +12,7 @@ export default function AboutPageClient({ aboutMe }) {
 
   const introduction = data.introduction;
   const EMPTY_DOC = { type: 'doc', content: [] };
-  const mainContent = data.mainContentJson && data.mainContentJson.type === 'doc' ? data.mainContentJson : EMPTY_DOC;
+  const mainContent = data.mainContent;
   const CTAtext = data.ctaText;
   const CTAlink = data.ctaLink;
   const sections = data.sectionsJson || [];
@@ -37,7 +38,7 @@ export default function AboutPageClient({ aboutMe }) {
             {/* Main Content Blocks */}
             {mainContent && (
               <div className="mb-8 text-lg font-serif leading-relaxed text-gray-800 max-w-2xl">
-                <BlocksRenderer content={mainContent} />
+                <SlateRenderer value={mainContent} />
               </div>
             )}
           </div>
@@ -75,7 +76,7 @@ export default function AboutPageClient({ aboutMe }) {
                 <div key={idx} className="mb-6">
                   {section.description && (
                     <div className="font-serif">
-                      <BlocksRenderer content={section.description && section.description.type === 'doc' ? section.description : EMPTY_DOC} />
+                      <SlateRenderer value={section.description} />
                     </div>
                   )}
                 </div>
