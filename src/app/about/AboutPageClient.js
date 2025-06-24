@@ -83,7 +83,7 @@ export default function AboutPageClient({ aboutMe }) {
         )}
         {/* Contact Info - added below sections and above CTA */}
         <div className="w-full flex justify-center my-4">
-          <span className="text-center text-base font-serif text-gray-700">
+          <span className="text-center text-sm font-serif text-gray-700">
             Open to tips, co-writing pitches, and journalism related conversations: <a href="mailto:aditya.anurag.roy@gmail.com" className="underline text-gray-700 font-serif">aditya.anurag.roy@gmail.com</a>
           </span>
         </div>
