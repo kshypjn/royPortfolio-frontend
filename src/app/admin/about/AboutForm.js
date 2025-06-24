@@ -2,43 +2,31 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
-import SlateEditor from '../../components/SlateEditor';
-
-const initialValue = [
-  {
-    type: 'paragraph',
-    children: [{ text: '' }],
-  },
-];
 
 export default function AboutForm({ initialData }) {
   const router = useRouter();
   const [formData, setFormData] = useState({
     introduction: '',
-    mainContent: initialValue,
+    mainContentJson: '[]',
     ctaText: '',
     ctaLink: '',
-    sections: [],
+    sectionsJson: '[]',
     profileImageUrl: '',
     linkedinUrl: '',
     twitterUrl: '',
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [isJsonValid, setIsJsonValid] = useState({ mainContentJson: true, sectionsJson: true });
 
   useEffect(() => {
     if (initialData) {
       setFormData({
         introduction: initialData.introduction || '',
-        mainContent: Array.isArray(initialData.mainContent) ? initialData.mainContent : initialValue,
+        mainContentJson: JSON.stringify(initialData.mainContentJson || [], null, 2),
         ctaText: initialData.ctaText || '',
         ctaLink: initialData.ctaLink || '',
-        sections: Array.isArray(initialData.sections)
-          ? initialData.sections.map(s => ({
-              ...s,
-              description: Array.isArray(s.description) ? s.description : initialValue
-            }))
-          : [],
+        sectionsJson: JSON.stringify(initialData.sectionsJson || [], null, 2),
         profileImageUrl: initialData.profileImageUrl || '',
         linkedinUrl: initialData.linkedinUrl || '',
         twitterUrl: initialData.twitterUrl || '',
@@ -46,47 +34,43 @@ export default function AboutForm({ initialData }) {
     }
   }, [initialData]);
 
-  const handleSectionChange = (idx, field, value) => {
-    setFormData((prev) => {
-      const updatedSections = [...prev.sections];
-      updatedSections[idx] = { ...updatedSections[idx], [field]: value };
-      return { ...prev, sections: updatedSections };
-    });
-  };
-
-  const addSection = () => {
-    setFormData((prev) => ({
-      ...prev,
-      sections: [
-        ...prev.sections,
-        { title: '', tab: '', description: initialValue },
-      ],
-    }));
-  };
-
-  const removeSection = (idx) => {
-    setFormData((prev) => {
-      const updatedSections = [...prev.sections];
-      updatedSections.splice(idx, 1);
-      return { ...prev, sections: updatedSections };
-    });
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === 'mainContentJson' || name === 'sectionsJson') {
+      try {
+        JSON.parse(value);
+        setIsJsonValid((prev) => ({ ...prev, [name]: true }));
+      } catch (error) {
+        setIsJsonValid((prev) => ({ ...prev, [name]: false }));
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage('');
+    let jsonValid = true;
+    const dataToSend = { ...formData };
     try {
-      const dataToSend = {
-        ...formData,
-        mainContent: formData.mainContent,
-        sections: formData.sections,
-      };
+      dataToSend.mainContentJson = JSON.parse(formData.mainContentJson);
+    } catch (error) {
+      setIsJsonValid((prev) => ({ ...prev, mainContentJson: false }));
+      jsonValid = false;
+    }
+    try {
+      dataToSend.sectionsJson = JSON.parse(formData.sectionsJson);
+    } catch (error) {
+      setIsJsonValid((prev) => ({ ...prev, sectionsJson: false }));
+      jsonValid = false;
+    }
+    if (!jsonValid) {
+      setMessage('Error: Invalid JSON in content fields. Please correct them.');
+      setLoading(false);
+      return;
+    }
+    try {
       const response = await fetch('/api/admin/about', {
         method: 'PATCH',
         headers: {
@@ -126,40 +110,30 @@ export default function AboutForm({ initialData }) {
           required
         />
       </div>
-      <SlateEditor
-        value={formData.mainContent}
-        onChange={val => setFormData(prev => ({ ...prev, mainContent: val }))}
-        label="Main Content (Rich Text)"
-      />
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">Sections (Work, Education, etc.)</label>
-        {formData.sections.map((section, idx) => (
-          <div key={idx} className="border border-gray-200 rounded-md p-4 mb-4 bg-gray-50">
-            <div className="flex gap-2 mb-2">
-              <input
-                type="text"
-                placeholder="Title"
-                value={section.title}
-                onChange={(e) => handleSectionChange(idx, 'title', e.target.value)}
-                className="flex-1 border border-gray-300 rounded-md p-2"
-              />
-              <input
-                type="text"
-                placeholder="Tab (e.g. Work, Education)"
-                value={section.tab}
-                onChange={(e) => handleSectionChange(idx, 'tab', e.target.value)}
-                className="flex-1 border border-gray-300 rounded-md p-2"
-              />
-              <button type="button" onClick={() => removeSection(idx)} className="text-red-500 font-bold px-2">Remove</button>
-            </div>
-            <SlateEditor
-              value={section.description}
-              onChange={val => handleSectionChange(idx, 'description', val)}
-              label="Description (Rich Text)"
-            />
-          </div>
-        ))}
-        <button type="button" onClick={addSection} className="bg-blue-100 text-blue-700 px-4 py-2 rounded-md font-semibold">Add Section</button>
+        <label htmlFor="mainContentJson" className="block text-sm font-medium text-gray-700">
+          Main Content (JSON Blocks)
+        </label>
+        <textarea
+          id="mainContentJson"
+          name="mainContentJson"
+          value={formData.mainContentJson}
+          onChange={handleChange}
+          rows="10"
+          className={`mt-1 block w-full border ${isJsonValid.mainContentJson ? 'border-gray-300' : 'border-red-500'} rounded-md shadow-sm p-2 font-mono text-xs`}
+          required
+        ></textarea>
+        {!isJsonValid.mainContentJson && (
+          <p className="text-red-500 text-xs mt-1">Invalid JSON format. Please ensure it&apos;s a valid JSON array.</p>
+        )}
+        <div className="mt-2 p-2 border border-blue-200 rounded-md bg-blue-50 text-sm">
+            <p className="font-semibold text-blue-800 mb-1">Preview Main Content:</p>
+            {isJsonValid.mainContentJson && formData.mainContentJson ? (
+                <BlocksRenderer content={JSON.parse(formData.mainContentJson)} />
+            ) : (
+                <p className="text-gray-500">Enter valid JSON to see preview.</p>
+            )}
+        </div>
       </div>
       <div className="mb-4">
         <label htmlFor="ctaText" className="block text-sm font-medium text-gray-700">CTA Button Text</label>
@@ -182,6 +156,35 @@ export default function AboutForm({ initialData }) {
           onChange={handleChange}
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
         />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="sectionsJson" className="block text-sm font-medium text-gray-700">
+          Sections (Work, Education, etc. - JSON Array)
+        </label>
+        <textarea
+          id="sectionsJson"
+          name="sectionsJson"
+          value={formData.sectionsJson}
+          onChange={handleChange}
+          rows="10"
+          className={`mt-1 block w-full border ${isJsonValid.sectionsJson ? 'border-gray-300' : 'border-red-500'} rounded-md shadow-sm p-2 font-mono text-xs`}
+        ></textarea>
+        {!isJsonValid.sectionsJson && (
+          <p className="text-red-500 text-xs mt-1">Invalid JSON format. Please ensure it&apos;s a valid JSON array.</p>
+        )}
+         <div className="mt-2 p-2 border border-blue-200 rounded-md bg-blue-50 text-sm">
+            <p className="font-semibold text-blue-800 mb-1">Preview Sections:</p>
+            {isJsonValid.sectionsJson && formData.sectionsJson ? (
+                JSON.parse(formData.sectionsJson).map((section, idx) => (
+                    <div key={idx} className="mb-2">
+                        <h5 className="font-semibold">{section.title} ({section.tab})</h5>
+                        {section.description && <BlocksRenderer content={section.description} />}
+                    </div>
+                ))
+            ) : (
+                <p className="text-gray-500">Enter valid JSON to see preview.</p>
+            )}
+        </div>
       </div>
       <div className="mb-4">
         <label htmlFor="profileImageUrl" className="block text-sm font-medium text-gray-700">Profile Image URL</label>
@@ -222,7 +225,7 @@ export default function AboutForm({ initialData }) {
       <button
         type="submit"
         className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
-        disabled={loading}
+        disabled={loading || !isJsonValid.mainContentJson || !isJsonValid.sectionsJson}
       >
         {loading ? 'Saving...' : 'Save Changes'}
       </button>
