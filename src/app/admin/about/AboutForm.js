@@ -2,15 +2,20 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
-import TipTapEditor from '../../components/TipTapEditor';
+import SlateEditor from '../../components/SlateEditor';
 
-const EMPTY_DOC = { type: 'doc', content: [] };
+const initialValue = [
+  {
+    type: 'paragraph',
+    children: [{ text: '' }],
+  },
+];
 
 export default function AboutForm({ initialData }) {
   const router = useRouter();
   const [formData, setFormData] = useState({
     introduction: '',
-    mainContentJson: EMPTY_DOC,
+    mainContent: initialValue,
     ctaText: '',
     ctaLink: '',
     sections: [],
@@ -25,13 +30,13 @@ export default function AboutForm({ initialData }) {
     if (initialData) {
       setFormData({
         introduction: initialData.introduction || '',
-        mainContentJson: initialData.mainContentJson && initialData.mainContentJson.type === 'doc' ? initialData.mainContentJson : EMPTY_DOC,
+        mainContent: Array.isArray(initialData.mainContent) ? initialData.mainContent : initialValue,
         ctaText: initialData.ctaText || '',
         ctaLink: initialData.ctaLink || '',
-        sections: Array.isArray(initialData.sectionsJson)
-          ? initialData.sectionsJson.map(s => ({
+        sections: Array.isArray(initialData.sections)
+          ? initialData.sections.map(s => ({
               ...s,
-              description: s.description && s.description.type === 'doc' ? s.description : EMPTY_DOC
+              description: Array.isArray(s.description) ? s.description : initialValue
             }))
           : [],
         profileImageUrl: initialData.profileImageUrl || '',
@@ -54,7 +59,7 @@ export default function AboutForm({ initialData }) {
       ...prev,
       sections: [
         ...prev.sections,
-        { title: '', tab: '', description: EMPTY_DOC },
+        { title: '', tab: '', description: initialValue },
       ],
     }));
   };
@@ -79,9 +84,9 @@ export default function AboutForm({ initialData }) {
     try {
       const dataToSend = {
         ...formData,
-        sectionsJson: formData.sections,
+        mainContent: formData.mainContent,
+        sections: formData.sections,
       };
-      delete dataToSend.sections;
       const response = await fetch('/api/admin/about', {
         method: 'PATCH',
         headers: {
@@ -121,9 +126,9 @@ export default function AboutForm({ initialData }) {
           required
         />
       </div>
-      <TipTapEditor
-        value={formData.mainContentJson}
-        onChange={(val) => setFormData((prev) => ({ ...prev, mainContentJson: val }))}
+      <SlateEditor
+        value={formData.mainContent}
+        onChange={val => setFormData(prev => ({ ...prev, mainContent: val }))}
         label="Main Content (Rich Text)"
       />
       <div className="mb-4">
@@ -147,9 +152,9 @@ export default function AboutForm({ initialData }) {
               />
               <button type="button" onClick={() => removeSection(idx)} className="text-red-500 font-bold px-2">Remove</button>
             </div>
-            <TipTapEditor
+            <SlateEditor
               value={section.description}
-              onChange={(val) => handleSectionChange(idx, 'description', val)}
+              onChange={val => handleSectionChange(idx, 'description', val)}
               label="Description (Rich Text)"
             />
           </div>
