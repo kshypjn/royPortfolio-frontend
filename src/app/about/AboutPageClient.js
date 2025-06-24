@@ -81,17 +81,21 @@ export default function AboutPageClient({ aboutMe }) {
             </div>
           </div>
         )}
+        {/* Contact Info - added below sections and above CTA */}
+        <div className="w-full flex justify-center my-4">
+          <span className="text-center text-base font-serif text-gray-700">
+            Open to tips, co-writing pitches, and journalism related conversations: <a href="mailto:aditya.anurag.roy@gmail.com" className="underline text-blue-700">aditya.anurag.roy@gmail.com</a>
+          </span>
+        </div>
         {/* CTA Section - moved below sections */}
-        {CTAtext && CTAlink && (
-          <div className="mt-2 flex justify-center gap-4 mb-2">
-            <Link href="/work" className="cta-btn">
-              <span>MY WORK</span>
-            </Link>
-            <a href={CTAlink} target="_blank" rel="noopener noreferrer" className="cta-btn">
-              <span>{CTAtext}</span>
-            </a>
-          </div>
-        )}
+        <div className="mt-2 flex justify-center gap-4 mb-2">
+          <Link href="/work" className="cta-btn">
+            <span>MY WORK</span>
+          </Link>
+          <a href="mailto:aditya.anurag.roy@gmail.com" className="cta-btn">
+            <span>Reach Out</span>
+          </a>
+        </div>
       </div>
       <Footer />
       <style jsx global>{`
