@@ -1,6 +1,13 @@
 import React from 'react';
 import { Text } from 'slate';
 
+const initialValue = [
+  {
+    type: 'paragraph',
+    children: [{ text: '' }],
+  },
+];
+
 function renderLeaf(leaf, children) {
   if (leaf.bold) children = <strong>{children}</strong>;
   if (leaf.italic) children = <em>{children}</em>;
@@ -22,8 +29,8 @@ function renderNode(node, key) {
 
 // Main renderer
 const SlateRenderer = ({ value }) => {
-  if (!Array.isArray(value)) return null;
-  return <>{value.map((node, i) => renderNode(node, i))}</>;
+  const safeValue = Array.isArray(value) ? value : initialValue;
+  return <>{safeValue.map((node, i) => renderNode(node, i))}</>;
 };
 
 export default SlateRenderer; 

@@ -41,6 +41,7 @@ const toggleMark = (editor, format) => {
 
 const SlateEditor = ({ value, onChange, label }) => {
   const editor = useMemo(() => withReact(createEditor()), []);
+  const safeValue = Array.isArray(value) ? value : initialValue;
 
   const renderLeaf = useCallback(props => {
     let { children } = props;
@@ -62,7 +63,7 @@ const SlateEditor = ({ value, onChange, label }) => {
       <div className="border border-gray-300 rounded-md p-2 bg-white">
         <Slate
           editor={editor}
-          value={value && Array.isArray(value) ? value : initialValue}
+          value={safeValue}
           onChange={onChange}
         >
           <div className="mb-2 flex gap-1">
