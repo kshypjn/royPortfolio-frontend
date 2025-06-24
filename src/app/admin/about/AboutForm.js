@@ -4,11 +4,13 @@ import { useRouter } from 'next/navigation';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 import TipTapEditor from '../../components/TipTapEditor';
 
+const EMPTY_DOC = { type: 'doc', content: [] };
+
 export default function AboutForm({ initialData }) {
   const router = useRouter();
   const [formData, setFormData] = useState({
     introduction: '',
-    mainContentJson: {},
+    mainContentJson: EMPTY_DOC,
     ctaText: '',
     ctaLink: '',
     sections: [],
@@ -23,10 +25,15 @@ export default function AboutForm({ initialData }) {
     if (initialData) {
       setFormData({
         introduction: initialData.introduction || '',
-        mainContentJson: initialData.mainContentJson || {},
+        mainContentJson: initialData.mainContentJson && initialData.mainContentJson.type === 'doc' ? initialData.mainContentJson : EMPTY_DOC,
         ctaText: initialData.ctaText || '',
         ctaLink: initialData.ctaLink || '',
-        sections: Array.isArray(initialData.sectionsJson) ? initialData.sectionsJson : [],
+        sections: Array.isArray(initialData.sectionsJson)
+          ? initialData.sectionsJson.map(s => ({
+              ...s,
+              description: s.description && s.description.type === 'doc' ? s.description : EMPTY_DOC
+            }))
+          : [],
         profileImageUrl: initialData.profileImageUrl || '',
         linkedinUrl: initialData.linkedinUrl || '',
         twitterUrl: initialData.twitterUrl || '',
@@ -47,7 +54,7 @@ export default function AboutForm({ initialData }) {
       ...prev,
       sections: [
         ...prev.sections,
-        { title: '', tab: '', description: {} },
+        { title: '', tab: '', description: EMPTY_DOC },
       ],
     }));
   };

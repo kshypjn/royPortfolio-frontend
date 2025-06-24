@@ -10,7 +10,8 @@ export default function AboutPageClient({ aboutMe }) {
   const data = aboutMe.data || {};
 
   const introduction = data.introduction;
-  const mainContent = data.mainContentJson;
+  const EMPTY_DOC = { type: 'doc', content: [] };
+  const mainContent = data.mainContentJson && data.mainContentJson.type === 'doc' ? data.mainContentJson : EMPTY_DOC;
   const CTAtext = data.ctaText;
   const CTAlink = data.ctaLink;
   const sections = data.sectionsJson || [];
@@ -54,7 +55,7 @@ export default function AboutPageClient({ aboutMe }) {
         </div>
         {/* Tabbed Sections (Work/Education) - full width below the flex row */}
         {sections.length > 0 && (
-          <div className="w-full mt-8">
+          <div className="w-full mt-4">
             <div className="flex gap-6 mb-4 mt-2 text-xs sm:text-sm font-mono tracking-widest uppercase text-gray-600">
               {tabNames.map((tab) => (
                 <button
@@ -69,12 +70,12 @@ export default function AboutPageClient({ aboutMe }) {
               ))}
             </div>
             <hr className="border-t border-gray-300 mb-6" />
-            <div className="mb-8">
+            <div className="mb-4">
               {filteredSections.map((section, idx) => (
                 <div key={idx} className="mb-6">
                   {section.description && (
                     <div className="font-serif">
-                      <BlocksRenderer content={section.description} />
+                      <BlocksRenderer content={section.description && section.description.type === 'doc' ? section.description : EMPTY_DOC} />
                     </div>
                   )}
                 </div>
@@ -84,7 +85,7 @@ export default function AboutPageClient({ aboutMe }) {
         )}
         {/* CTA Section - moved below sections */}
         {CTAtext && CTAlink && (
-          <div className="mt-1 flex justify-center gap-4 mb-4">
+          <div className="mt-2 flex justify-center gap-4 mb-2">
             <Link href="/work" className="cta-btn">
               <span>MY WORK</span>
             </Link>
