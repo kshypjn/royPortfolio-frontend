@@ -39,17 +39,6 @@ export default function AboutPageClient({ aboutMe }) {
                 <BlocksRenderer content={mainContent} />
               </div>
             )}
-            {/* CTA Section */}
-            {CTAtext && CTAlink && (
-              <div className="mt-1 flex justify-center gap-4">
-                <Link href="/work" className="cta-btn">
-                  <span>MY WORK</span>
-                </Link>
-                <a href={CTAlink} target="_blank" rel="noopener noreferrer" className="cta-btn">
-                  <span>{CTAtext}</span>
-                </a>
-              </div>
-            )}
           </div>
           {/* Right: Profile Image (always visible on desktop, above text on mobile) */}
           {profilePictureUrl && (
@@ -91,6 +80,17 @@ export default function AboutPageClient({ aboutMe }) {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+        {/* CTA Section - moved below sections */}
+        {CTAtext && CTAlink && (
+          <div className="mt-1 flex justify-center gap-4 mb-4">
+            <Link href="/work" className="cta-btn">
+              <span>MY WORK</span>
+            </Link>
+            <a href={CTAlink} target="_blank" rel="noopener noreferrer" className="cta-btn">
+              <span>{CTAtext}</span>
+            </a>
           </div>
         )}
       </div>
