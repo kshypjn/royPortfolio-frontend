@@ -93,7 +93,7 @@ export default function AboutPageClient({ aboutMe }) {
             <span>MY WORK</span>
           </Link>
           <a href="mailto:aditya.anurag.roy@gmail.com" className="cta-btn">
-            <span>Reach Out</span>
+            <span>REACH OUT TO ME</span>
           </a>
         </div>
       </div>
