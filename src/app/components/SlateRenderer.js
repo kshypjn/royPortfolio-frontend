@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from 'slate';
 
 function renderLeaf(leaf, children) {
   if (leaf.bold) children = <strong>{children}</strong>;
