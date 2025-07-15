@@ -1,18 +1,8 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google"; 
-import { createClient } from "@supabase/supabase-js"; 
+import GoogleProvider from "next-auth/providers/google";
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY, 
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  }
-);
+// Remove all Supabase-related code and references
 
 export const authOptions = {
   // Configure authentication providers
@@ -30,29 +20,12 @@ export const authOptions = {
 
         try {
           // Attempt to sign in the user directly with Supabase Auth
-          const { data: authData, error: authError } = await supabaseAdmin.auth.signInWithPassword({
-            email: credentials.email,
-            password: credentials.password,
-          });
-
-          if (authError) {
-            console.error("Supabase authentication error:", authError.message);
-            // Return null or throw an error depending on how you want to handle
-            return null; // Authentication failed
-          }
-
-          // Check if Supabase returned a user and a session
-          if (authData.user && authData.session) {
-            // Return a user object that NextAuth expects.
-            // NextAuth will then create a session based on this user object.
-            return {
-              id: authData.user.id,
-              email: authData.user.email,
-              name: authData.user.user_metadata?.full_name || authData.user.email, // Use full_name if available, else email
-              // You can add other properties from authData.user here if needed for your session
-            };
-          }
-          return null; // Authentication failed (no user or session)
+          // This part of the logic needs to be adapted for Prisma
+          // For now, we'll return null as Supabase is removed.
+          // In a real scenario, you would integrate with your Prisma schema
+          // to validate credentials and return a user object.
+          console.warn("Supabase authentication logic removed. Credentials validation skipped.");
+          return null; // Authentication failed
         } catch (error) {
           console.error("Error during NextAuth authorize function:", error);
           return null;

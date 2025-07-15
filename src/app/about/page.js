@@ -60,7 +60,7 @@ export default async function AboutPage() {
           <p className="mt-4 text-gray-700">
             Please ensure:
             <ul className="list-disc list-inside ml-4">
-              <li>You have exactly one row in your `about_page` table in Supabase.</li>
+              <li>You have exactly one row in your `about_page` table in the database.</li>
               <li>All JSON fields (`main_content_json`, `sections_json`) contain valid JSON (even `[]` if empty).</li>
               <li>The RLS policy for `about_page` allows `SELECT` for the `public` role.</li>
             </ul>

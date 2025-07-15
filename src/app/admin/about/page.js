@@ -20,7 +20,7 @@ export default async function AdminAboutPage() {
   try {
     initialData = await prisma.aboutPage.findFirst();
     if (!initialData) {
-      error = "No About Page entry found. Please create one row in the 'about_page' table in Supabase.";
+      error = "No About Page entry found. Please create one row in the 'about_page' table in the database.";
     }
   } catch (e) {
     console.error("Error fetching About Page for admin:", e);

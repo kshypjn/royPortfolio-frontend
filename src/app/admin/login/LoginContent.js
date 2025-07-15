@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export default function LoginContent() {
   const [error, setError] = useState(null);
@@ -11,8 +10,6 @@ export default function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session, status } = useSession();
-
-  const supabase = createClientComponentClient();
 
   useEffect(() => {
     setError(null);

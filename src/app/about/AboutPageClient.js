@@ -17,7 +17,7 @@ export default function AboutPageClient({ aboutMe }) {
   const sections = data.sectionsJson || [];
   const profilePictureUrl = data.profileImageUrl;
 
-  // Tab logic for sections (dynamic from Supabase/Prisma via transformation)
+  // Tab logic for sections (dynamic from Prisma via transformation)
   const tabNames = Array.from(new Set(sections.map(s => (s.tab || 'WORK').toUpperCase())));
   const [activeTab, setActiveTab] = useState(tabNames[0] || 'WORK');
   const filteredSections = sections.filter(

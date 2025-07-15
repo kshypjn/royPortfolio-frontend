@@ -1,42 +1,11 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route"; 
-import { createClient } from '@supabase/supabase-js';
+import { authOptions } from "../../auth/[...nextauth]/route";
 
 const prisma = new PrismaClient();
 
-// Initialize Supabase client with error handling
-let supabase;
-try {
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
-
-  if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('Missing Supabase environment variables:', {
-      hasUrl: !!supabaseUrl,
-      hasKey: !!supabaseAnonKey
-    });
-    throw new Error('Missing Supabase environment variables');
-  }
-
-  supabase = createClient(supabaseUrl, supabaseAnonKey);
-} catch (error) {
-  console.error('Failed to initialize Supabase client:', error);
-  // Don't throw here, let the route handlers handle the error
-}
-
-console.log(">> SUPABASE_URL:", process.env.SUPABASE_URL);
-console.log(">> SUPABASE_ANON_KEY:", process.env.SUPABASE_ANON_KEY);
-
 export async function PUT(request, { params }) {
-  if (!supabase) {
-    return NextResponse.json(
-      { message: 'Supabase client not initialized. Please check environment variables.' },
-      { status: 500 }
-    );
-  }
-
   const session = await getServerSession(authOptions);
 
   if (!session) {
