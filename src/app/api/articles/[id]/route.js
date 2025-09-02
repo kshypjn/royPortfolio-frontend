@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";
-
-const prisma = new PrismaClient();
+import { supabase } from '@/lib/supabaseClient';
 
 export async function PUT(request, { params }) {
   const session = await getServerSession(authOptions);
@@ -27,7 +25,7 @@ export async function PUT(request, { params }) {
       return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
     }
 
-    // Ensure publishedDate is a valid ISO string or Date object for Prisma
+    // Ensure publishedDate is a valid ISO string or Date object
     let parsedPublishedDate = null;
     if (publishedDate) {
         try {
@@ -41,30 +39,35 @@ export async function PUT(request, { params }) {
         }
     }
 
-    // 2. Update Article using Prisma
-    const updatedArticle = await prisma.article.update({
-      where: { id: articleId },
-      data: {
-        title,
-        url,
-        publication,
-        thumbnailUrl,
-        publishedDate: parsedPublishedDate,
-        tags, // Tags should already be an array from the form
-        status,
-      },
-    });
+    const updatePayload = {
+      title,
+      url,
+      publication,
+      thumbnailUrl,
+      publishedDate: parsedPublishedDate ? parsedPublishedDate.toISOString().slice(0,10) : null,
+      tags,
+      status,
+    };
 
-    return NextResponse.json(updatedArticle, { status: 200 });
+    const { data, error } = await supabase
+      .from('Articles')
+      .update(updatePayload)
+      .eq('id', articleId)
+      .select()
+      .maybeSingle();
+
+    if (error) throw error;
+
+    return NextResponse.json(data, { status: 200 });
 
   } catch (error) {
-    console.error('Error updating article:', error);
-    // Handle specific Prisma errors if needed (e.g., unique constraint violations)
-    if (error.code === 'P2025') { // Prisma error code for record not found
-        return NextResponse.json({ message: 'Article not found.' }, { status: 404 });
+    const message = (error && typeof error === 'object' && 'message' in error) ? error.message : String(error);
+    console.error('Error updating article:', { message });
+    if (message && message.includes('duplicate key value')) {
+      return NextResponse.json({ message: 'A unique field already exists (likely url).' }, { status: 409 });
     }
-    if (error.code === 'P2002') { // Prisma unique constraint violation
-        return NextResponse.json({ message: `A unique field already exists: ${error.meta?.target}` }, { status: 409 });
+    if (message && message.includes('No rows updated')) {
+      return NextResponse.json({ message: 'Article not found.' }, { status: 404 });
     }
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }

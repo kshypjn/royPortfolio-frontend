@@ -1,6 +1,6 @@
 import WorkGrid from '../components/WorkGrid';
 import Footer from '../components/Footer';
-import prisma from '../../lib/prisma';
+import { supabase } from '@/lib/supabaseClient';
 
 export const revalidate = 60; // Optional: ISR
 
@@ -9,26 +9,20 @@ export default async function WorkPage() {
   let error = null;
 
   try {
-    const fetchedArticles = await prisma.article.findMany({
-      where: { status: 'Published' },
-      orderBy: { publishedDate: 'desc' },
-      select: {
-        id: true,
-        title: true,
-        url: true,
-        publication: true,
-        thumbnailUrl: true,
-        publishedDate: true,
-        tags: true,
-      }
-    });
+    const { data: fetchedArticles, error: fetchError } = await supabase
+      .from('Articles')
+      .select('id, title, url, publication, thumbnailUrl, publishedDate, tags')
+      .eq('status', 'Published')
+      .order('publishedDate', { ascending: false });
+
+    if (fetchError) throw fetchError;
 
     // Transform to WorkGrid.js shape
-    const transformedArticles = fetchedArticles.map(article => ({
+    const transformedArticles = (fetchedArticles || []).map(article => ({
       id: article.id,
       URL: article.url || '#',
       Title: article.title || 'Untitled Article',
-      PublicationDate: article.publishedDate ? article.publishedDate.toISOString() : null,
+      PublicationDate: article.publishedDate || null,
       image: { url: article.thumbnailUrl || '/placeholder.png' },
       tags: Array.isArray(article.tags)
         ? article.tags.map((tag, idx) => ({ id: `${article.id}-tag-${idx}`, name: tag }))
@@ -49,8 +43,9 @@ export default async function WorkPage() {
       a.publicationName.localeCompare(b.publicationName)
     );
   } catch (e) {
-    console.error("Error fetching articles:", e);
-    error = "Failed to load articles. Please check your database connection and RLS policies.";
+    const message = (e && typeof e === 'object' && 'message' in e) ? e.message : String(e);
+    console.error('Error fetching articles:', { message });
+    error = 'Failed to load articles. Please check your database connection and RLS policies.';
   }
 
   if (error) {

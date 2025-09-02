@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import prisma from '../../../lib/prisma';
+import { supabase } from "@/lib/supabaseClient";
 import { authOptions } from "../auth/[...nextauth]/route";
 
 // Helper to validate URLs (simple regex)
@@ -20,12 +20,15 @@ export async function GET(request) {
     return new NextResponse(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
   }
   try {
-    const articles = await prisma.article.findMany({
-      orderBy: { publishedDate: "desc" },
-    });
-    return NextResponse.json(articles);
+    const { data, error } = await supabase
+      .from('Articles')
+      .select('*')
+      .order('publishedDate', { ascending: false });
+    if (error) throw error;
+    return NextResponse.json(data || []);
   } catch (error) {
-    console.error("Error fetching articles:", error);
+    const message = (error && typeof error === 'object' && 'message' in error) ? error.message : String(error);
+    console.error("Error fetching articles:", { message });
     return new NextResponse(JSON.stringify({ message: "Internal Server Error" }), { status: 500 });
   }
 }
@@ -54,22 +57,30 @@ export async function POST(request) {
     const tagsArray = tags
       ? tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
       : [];
-    const newArticle = await prisma.article.create({
-      data: {
-        title,
-        url,
-        publication,
-        thumbnailUrl: thumbnailUrl || null,
-        publishedDate: new Date(publishedDate),
-        tags: tagsArray,
-      },
-    });
-    return NextResponse.json(newArticle, { status: 201 });
-  } catch (error) {
-    console.error("Error creating article:", error);
-    if (error.code === 'P2002' && error.meta?.target?.includes('url')) {
-      return new NextResponse(JSON.stringify({ message: "An article with this URL already exists." }), { status: 409 });
+    const insertPayload = {
+      title,
+      url,
+      publication,
+      thumbnailUrl: thumbnailUrl || null,
+      publishedDate: new Date(publishedDate).toISOString().slice(0,10),
+      tags: tagsArray,
+    };
+    const { data, error } = await supabase
+      .from('Articles')
+      .insert(insertPayload)
+      .select()
+      .single();
+    if (error) {
+      // Unique violation for url
+      if (error.code === '23505') {
+        return new NextResponse(JSON.stringify({ message: "An article with this URL already exists." }), { status: 409 });
+      }
+      throw error;
     }
+    return NextResponse.json(data, { status: 201 });
+  } catch (error) {
+    const message = (error && typeof error === 'object' && 'message' in error) ? error.message : String(error);
+    console.error("Error creating article:", { message });
     return new NextResponse(JSON.stringify({ message: "Failed to create article due to an internal server error." }), { status: 500 });
   }
 } 

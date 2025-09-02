@@ -1,45 +1,63 @@
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import prisma from '../../../../lib/prisma';
+import { supabase } from '@/lib/supabaseClient';
 
 // Handler for PATCH requests (to update the AboutPage)
 export async function PATCH(request) {
   try {
     const body = await request.json();
 
-    // Find the single AboutPage entry (we assume there's only one)
-    const existingAboutPage = await prisma.aboutPage.findFirst();
+    const { data: existing, error: findError } = await supabase
+      .from('AboutPage')
+      .select('id')
+      .limit(1)
+      .maybeSingle();
 
-    if (!existingAboutPage) {
-      return NextResponse.json({ message: 'About page entry not found.' }, { status: 404 });
+    if (findError) throw findError;
+
+    const updatePayload = {
+      introduction_text: body.introduction,
+      main_content_json: body.mainContentJson,
+      cta_text: body.ctaText,
+      cta_link: body.ctaLink,
+      sections_json: body.sectionsJson,
+      profile_image_url: body.profileImageUrl,
+      linkedinUrl: body.linkedinUrl,
+      twitterUrl: body.twitterUrl,
+    };
+
+    let updated = null;
+    if (existing?.id) {
+      const { data, error: updateError } = await supabase
+        .from('AboutPage')
+        .update(updatePayload)
+        .eq('id', existing.id)
+        .select()
+        .maybeSingle();
+      if (updateError) throw updateError;
+      updated = data;
+    } else {
+      const { data, error: insertError } = await supabase
+        .from('AboutPage')
+        .insert(updatePayload)
+        .select()
+        .maybeSingle();
+      if (insertError) throw insertError;
+      updated = data;
     }
 
-    // Update the existing AboutPage entry
-    const updatedAboutPage = await prisma.aboutPage.update({
-      where: { id: existingAboutPage.id }, // Use the ID of the existing entry
-      data: {
-        introduction: body.introduction,
-        mainContentJson: body.mainContentJson, // Ensure this is valid JSON
-        ctaText: body.ctaText,
-        ctaLink: body.ctaLink,
-        sectionsJson: body.sectionsJson, // Ensure this is valid JSON
-        profileImageUrl: body.profileImageUrl,
-        linkedinUrl: body.linkedinUrl,
-        twitterUrl: body.twitterUrl,
-      },
-    });
+    if (updateError) throw updateError;
 
     revalidatePath('/about');
 
-    return NextResponse.json(updatedAboutPage, { status: 200 });
+    return NextResponse.json(updated, { status: 200 });
 
   } catch (error) {
-    console.error('Error updating About Page:', error);
+    const message = (error && typeof error === 'object' && 'message' in error) ? error.message : String(error);
+    console.error('Error updating About Page:', { message });
     return NextResponse.json(
-      { message: 'Failed to update About Page.', error: error.message },
+      { message: 'Failed to update About Page.', error: message },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
-} 
+}
