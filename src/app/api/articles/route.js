@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from 'next/cache';
 import { getServerSession } from "next-auth";
 import { supabase } from "@/lib/supabaseClient";
+import { supabaseAdmin } from "@/lib/supabaseServer";
 import { authOptions } from "../auth/[...nextauth]/route";
 
 // Helper to validate URLs (simple regex)
@@ -20,7 +22,8 @@ export async function GET(request) {
     return new NextResponse(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
   }
   try {
-    const { data, error } = await supabase
+    const client = supabaseAdmin || supabase;
+    const { data, error } = await client
       .from('Articles')
       .select('*')
       .order('publishedDate', { ascending: false });
@@ -29,7 +32,7 @@ export async function GET(request) {
   } catch (error) {
     const message = (error && typeof error === 'object' && 'message' in error) ? error.message : String(error);
     console.error("Error fetching articles:", { message });
-    return new NextResponse(JSON.stringify({ message: "Internal Server Error" }), { status: 500 });
+    return new NextResponse(JSON.stringify({ message }), { status: 500 });
   }
 }
 
@@ -41,7 +44,7 @@ export async function POST(request) {
   }
   try {
     const body = await request.json();
-    const { title, url, publication, thumbnailUrl, publishedDate, tags } = body;
+    const { title, url, publication, thumbnailUrl, publishedDate, tags, status } = body;
     if (!title || title.trim() === '') {
       return new NextResponse(JSON.stringify({ message: "Title is required." }), { status: 400 });
     }
@@ -64,8 +67,10 @@ export async function POST(request) {
       thumbnailUrl: thumbnailUrl || null,
       publishedDate: new Date(publishedDate).toISOString().slice(0,10),
       tags: tagsArray,
+      status: status || 'Draft',
     };
-    const { data, error } = await supabase
+    const client = supabaseAdmin || supabase;
+    const { data, error } = await client
       .from('Articles')
       .insert(insertPayload)
       .select()
@@ -77,6 +82,8 @@ export async function POST(request) {
       }
       throw error;
     }
+    // Revalidate the public Work page to show the new article sooner
+    try { revalidatePath('/work'); } catch (_) {}
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
     const message = (error && typeof error === 'object' && 'message' in error) ? error.message : String(error);

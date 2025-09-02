@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";
 import { supabase } from '@/lib/supabaseClient';
+import { supabaseAdmin } from '@/lib/supabaseServer';
 
 export async function PUT(request, { params }) {
   const session = await getServerSession(authOptions);
@@ -49,7 +51,8 @@ export async function PUT(request, { params }) {
       status,
     };
 
-    const { data, error } = await supabase
+    const client = supabaseAdmin || supabase;
+    const { data, error } = await client
       .from('Articles')
       .update(updatePayload)
       .eq('id', articleId)
@@ -58,6 +61,7 @@ export async function PUT(request, { params }) {
 
     if (error) throw error;
 
+    try { revalidatePath('/articles'); revalidatePath('/work'); } catch (_) {}
     return NextResponse.json(data, { status: 200 });
 
   } catch (error) {
@@ -69,7 +73,35 @@ export async function PUT(request, { params }) {
     if (message && message.includes('No rows updated')) {
       return NextResponse.json({ message: 'Article not found.' }, { status: 404 });
     }
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ message }, { status: 500 });
+  }
+}
+
+export async function DELETE(request, { params }) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
+  const articleId = params.id;
+  if (!articleId) {
+    return NextResponse.json({ message: 'Article ID is required' }, { status: 400 });
+  }
+
+  try {
+    const client = supabaseAdmin || supabase;
+    const { error } = await client
+      .from('Articles')
+      .delete()
+      .eq('id', articleId);
+    if (error) throw error;
+    try { revalidatePath('/articles'); revalidatePath('/work'); } catch (_) {}
+    return NextResponse.json({ success: true }, { status: 200 });
+  } catch (error) {
+    const message = (error && typeof error === 'object' && 'message' in error) ? error.message : String(error);
+    console.error('Error deleting article:', { message });
+    return NextResponse.json({ message }, { status: 500 });
   }
 }
 

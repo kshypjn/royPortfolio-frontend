@@ -31,6 +31,19 @@ export default async function AboutPage() {
     if (fetchError) throw fetchError;
 
     if (!data) {
+      // Provide an empty skeleton if no data exists yet
+      aboutContentForClient = {
+        data: {
+          introduction: '',
+          ctaText: '',
+          ctaLink: '',
+          mainContentJson: [],
+          sectionsJson: [],
+          profileImageUrl: '',
+          linkedinUrl: '',
+          twitterUrl: '',
+        }
+      };
       error = "About page content not found in database. Please ensure you've added a row to the 'about_page' table.";
     } else {
       aboutContentForClient = {
@@ -57,27 +70,7 @@ export default async function AboutPage() {
     error = `Failed to load about me content. Details: ${uiMessage}. Please check database connection, RLS policies, and data integrity.`;
   }
 
-  if (error) {
-    return (
-      <main className="bg-white min-h-screen flex flex-col items-center py-10 px-2 sm:px-0">
-        <div className="w-full sm:max-w-4xl sm:bg-white sm:rounded-2xl sm:shadow-xl sm:border sm:border-gray-100 sm:p-12 text-red-500">
-          <h1 className="text-4xl font-bold mb-8">About Me Error</h1>
-          <p>{error}</p>
-          <div className="mt-4 text-gray-700">
-            Please ensure:
-            <ul className="list-disc list-inside ml-4">
-              <li>You have exactly one row in your `about_page` table in the database.</li>
-              <li>All JSON fields (`main_content_json`, `sections_json`) contain valid JSON (even `[]` if empty).</li>
-              <li>The RLS policy for `about_page` allows `SELECT` for the `public` role.</li>
-            </ul>
-          </div>
-        </div>
-      </main>
-    );
-  }
-
-  // If no error, proceed to render the client component
-  // Ensure aboutContentForClient is not null before parsing
+  // Render skeleton-based client component regardless; show a soft notice if needed
   return (
     <AboutPageClient aboutMe={JSON.parse(JSON.stringify(aboutContentForClient))} />
   );

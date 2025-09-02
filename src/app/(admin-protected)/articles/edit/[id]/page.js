@@ -2,7 +2,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../api/auth/[...nextauth]/route";
 import { redirect, notFound } from 'next/navigation';
 import ArticleEditForm from '../../../../../components/ArticleEditForm'; // Adjust path if needed
-import prisma from '../../../../../lib/prisma';
+import { supabase } from '@/lib/supabaseClient';
+import { supabaseAdmin } from '@/lib/supabaseServer';
 
 export default async function EditArticlePage({ params }) {
   const session = await getServerSession(authOptions);
@@ -15,18 +16,21 @@ export default async function EditArticlePage({ params }) {
 
   const articleId = params.id;
 
-  // 2. Fetch Article Data (Server-Side)
+  // 2. Fetch Article Data (Server-Side) via Supabase (prefer admin client)
   let article = null;
   try {
-    article = await prisma.article.findUnique({
-      where: {
-        id: articleId,
-      },
-    });
+    const client = supabaseAdmin || supabase;
+    const { data, error } = await client
+      .from('Articles')
+      .select('*')
+      .eq('id', articleId)
+      .maybeSingle();
+    if (error) throw error;
+    article = data || null;
   } catch (error) {
-    console.error("Error fetching article:", error);
-    // Optionally redirect to an error page or show a generic error
-    notFound(); // If database error, treat as not found for user experience
+    const message = (error && typeof error === 'object' && 'message' in error) ? error.message : String(error);
+    console.error('Error fetching article:', { message });
+    notFound();
   }
 
   // 3. Handle Article Not Found

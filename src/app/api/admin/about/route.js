@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { supabase } from '@/lib/supabaseClient';
+import { supabaseAdmin } from '@/lib/supabaseServer';
 
 // Handler for PATCH requests (to update the AboutPage)
 export async function PATCH(request) {
   try {
     const body = await request.json();
 
-    const { data: existing, error: findError } = await supabase
+    const client = supabaseAdmin || supabase;
+    const { data: existing, error: findError } = await client
       .from('AboutPage')
       .select('id')
       .limit(1)
@@ -28,7 +30,7 @@ export async function PATCH(request) {
 
     let updated = null;
     if (existing?.id) {
-      const { data, error: updateError } = await supabase
+      const { data, error: updateError } = await client
         .from('AboutPage')
         .update(updatePayload)
         .eq('id', existing.id)
@@ -37,7 +39,7 @@ export async function PATCH(request) {
       if (updateError) throw updateError;
       updated = data;
     } else {
-      const { data, error: insertError } = await supabase
+      const { data, error: insertError } = await client
         .from('AboutPage')
         .insert(updatePayload)
         .select()

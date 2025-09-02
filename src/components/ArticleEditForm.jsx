@@ -17,6 +17,7 @@ export default function ArticleEditForm({ article }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (article) {
@@ -52,8 +53,8 @@ export default function ArticleEditForm({ article }) {
     const dataToSend = {
       ...formData,
       tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== ''),
-      // Convert date string back to ISO format if needed by Prisma
-      publishedDate: formData.publishedDate ? new Date(formData.publishedDate).toISOString() : null,
+      // API expects YYYY-MM-DD for Supabase date column
+      publishedDate: formData.publishedDate || null,
     };
 
     try {
@@ -79,6 +80,27 @@ export default function ArticleEditForm({ article }) {
       setError(err.message || 'An unexpected error occurred.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!confirm('Are you sure you want to delete this article? This cannot be undone.')) return;
+    setDeleting(true);
+    setError(null);
+    setSuccess(false);
+    try {
+      const res = await fetch(`/api/articles/${article.id}`, { method: 'DELETE' });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Failed to delete article');
+      }
+      router.push('/articles');
+      router.refresh();
+    } catch (err) {
+      console.error('Failed to delete article:', err);
+      setError(err.message || 'An unexpected error occurred.');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -179,6 +201,14 @@ export default function ArticleEditForm({ article }) {
         className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50"
       >
         {loading ? 'Updating...' : 'Update Article'}
+      </button>
+      <button
+        type="button"
+        onClick={handleDelete}
+        disabled={deleting}
+        className="ml-4 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 disabled:opacity-50"
+      >
+        {deleting ? 'Deleting...' : 'Delete'}
       </button>
       <button
         type="button"

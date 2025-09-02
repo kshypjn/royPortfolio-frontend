@@ -1,6 +1,7 @@
 import WorkGrid from '../components/WorkGrid';
 import Footer from '../components/Footer';
 import { supabase } from '@/lib/supabaseClient';
+import { supabaseAdmin } from '@/lib/supabaseServer';
 
 export const revalidate = 60; // Optional: ISR
 
@@ -9,7 +10,8 @@ export default async function WorkPage() {
   let error = null;
 
   try {
-    const { data: fetchedArticles, error: fetchError } = await supabase
+    const client = supabaseAdmin || supabase;
+    const { data: fetchedArticles, error: fetchError } = await client
       .from('Articles')
       .select('id, title, url, publication, thumbnailUrl, publishedDate, tags')
       .eq('status', 'Published')
