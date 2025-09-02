@@ -3,7 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";
 import { supabase } from '@/lib/supabaseClient';
-import { supabaseAdmin } from '@/lib/supabaseServer';
+import { getSupabaseServer } from '@/lib/supabaseServer';
 
 export async function PUT(request, { params }) {
   const session = await getServerSession(authOptions);
@@ -51,7 +51,7 @@ export async function PUT(request, { params }) {
       status,
     };
 
-    const client = supabaseAdmin || supabase;
+    const client = (process.env.SUPABASE_SERVICE_ROLE_KEY ? getSupabaseServer() : supabase);
     const { data, error } = await client
       .from('Articles')
       .update(updatePayload)
@@ -90,7 +90,7 @@ export async function DELETE(request, { params }) {
   }
 
   try {
-    const client = supabaseAdmin || supabase;
+    const client = (process.env.SUPABASE_SERVICE_ROLE_KEY ? getSupabaseServer() : supabase);
     const { error } = await client
       .from('Articles')
       .delete()

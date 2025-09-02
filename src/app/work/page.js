@@ -1,7 +1,8 @@
 import WorkGrid from '../components/WorkGrid';
 import Footer from '../components/Footer';
 import { supabase } from '@/lib/supabaseClient';
-import { supabaseAdmin } from '@/lib/supabaseServer';
+import { getSupabaseServer } from '@/lib/supabaseServer';
+export const dynamic = 'force-dynamic';
 
 export const revalidate = 60; // Optional: ISR
 
@@ -10,7 +11,7 @@ export default async function WorkPage() {
   let error = null;
 
   try {
-    const client = supabaseAdmin || supabase;
+    const client = (process.env.SUPABASE_SERVICE_ROLE_KEY ? getSupabaseServer() : supabase);
     const { data: fetchedArticles, error: fetchError } = await client
       .from('Articles')
       .select('id, title, url, publication, thumbnailUrl, publishedDate, tags')
@@ -45,7 +46,7 @@ export default async function WorkPage() {
       a.publicationName.localeCompare(b.publicationName)
     );
   } catch (e) {
-    const message = (e && typeof e === 'object' && 'message' in e) ? e.message : String(e);
+    const message = (e && typeof e === 'object' && 'message' in e) ? e.message : JSON.stringify(e);
     console.error('Error fetching articles:', { message });
     error = 'Failed to load articles. Please check your database connection and RLS policies.';
   }

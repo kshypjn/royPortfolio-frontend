@@ -3,7 +3,7 @@ import { authOptions } from "../../../../api/auth/[...nextauth]/route";
 import { redirect, notFound } from 'next/navigation';
 import ArticleEditForm from '../../../../../components/ArticleEditForm'; // Adjust path if needed
 import { supabase } from '@/lib/supabaseClient';
-import { supabaseAdmin } from '@/lib/supabaseServer';
+import { getSupabaseServer } from '@/lib/supabaseServer';
 
 export default async function EditArticlePage({ params }) {
   const session = await getServerSession(authOptions);
@@ -19,7 +19,7 @@ export default async function EditArticlePage({ params }) {
   // 2. Fetch Article Data (Server-Side) via Supabase (prefer admin client)
   let article = null;
   try {
-    const client = supabaseAdmin || supabase;
+    const client = (process.env.SUPABASE_SERVICE_ROLE_KEY ? getSupabaseServer() : supabase);
     const { data, error } = await client
       .from('Articles')
       .select('*')

@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { supabase } from '@/lib/supabaseClient';
-import { supabaseAdmin } from '@/lib/supabaseServer';
+import { getSupabaseServer } from '@/lib/supabaseServer';
 
 // Handler for PATCH requests (to update the AboutPage)
 export async function PATCH(request) {
   try {
     const body = await request.json();
 
-    const client = supabaseAdmin || supabase;
+    const client = (process.env.SUPABASE_SERVICE_ROLE_KEY ? getSupabaseServer() : supabase);
     const { data: existing, error: findError } = await client
       .from('AboutPage')
       .select('id')

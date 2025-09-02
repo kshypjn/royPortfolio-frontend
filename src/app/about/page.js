@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabaseClient';
+export const dynamic = 'force-dynamic';
 import AboutPageClient from './AboutPageClient';
 
 export const metadata = {
@@ -18,7 +19,18 @@ export const metadata = {
 };
 
 export default async function AboutPage() {
-  let aboutContentForClient = null;
+  let aboutContentForClient = {
+    data: {
+      introduction: '',
+      ctaText: '',
+      ctaLink: '',
+      mainContentJson: [],
+      sectionsJson: [],
+      profileImageUrl: '',
+      linkedinUrl: '',
+      twitterUrl: '',
+    }
+  };
   let error = null;
 
   try {
@@ -63,15 +75,28 @@ export default async function AboutPage() {
   } catch (e) {
     const safeError = (e instanceof Error)
       ? { name: e.name, message: e.message, stack: e.stack }
-      : { message: typeof e === 'string' ? e : String(e) };
+      : { message: typeof e === 'string' ? e : JSON.stringify(e) };
     console.error('Error fetching About Page content:', safeError);
 
     const uiMessage = safeError.message || 'Unknown error';
     error = `Failed to load about me content. Details: ${uiMessage}. Please check database connection, RLS policies, and data integrity.`;
+    if (!aboutContentForClient) {
+      aboutContentForClient = {
+        data: {
+          introduction: '',
+          ctaText: '',
+          ctaLink: '',
+          mainContentJson: [],
+          sectionsJson: [],
+          profileImageUrl: '',
+          linkedinUrl: '',
+          twitterUrl: '',
+        }
+      };
+    }
   }
 
-  // Render skeleton-based client component regardless; show a soft notice if needed
-  return (
+return (
     <AboutPageClient aboutMe={JSON.parse(JSON.stringify(aboutContentForClient))} />
   );
 } 

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from 'next/cache';
 import { getServerSession } from "next-auth";
 import { supabase } from "@/lib/supabaseClient";
-import { supabaseAdmin } from "@/lib/supabaseServer";
+import { getSupabaseServer } from "@/lib/supabaseServer";
 import { authOptions } from "../auth/[...nextauth]/route";
 
 // Helper to validate URLs (simple regex)
@@ -22,7 +22,7 @@ export async function GET(request) {
     return new NextResponse(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
   }
   try {
-    const client = supabaseAdmin || supabase;
+    const client = (process.env.SUPABASE_SERVICE_ROLE_KEY ? getSupabaseServer() : supabase);
     const { data, error } = await client
       .from('Articles')
       .select('*')
@@ -69,7 +69,7 @@ export async function POST(request) {
       tags: tagsArray,
       status: status || 'Draft',
     };
-    const client = supabaseAdmin || supabase;
+    const client = (process.env.SUPABASE_SERVICE_ROLE_KEY ? getSupabaseServer() : supabase);
     const { data, error } = await client
       .from('Articles')
       .insert(insertPayload)

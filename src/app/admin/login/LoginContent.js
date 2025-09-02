@@ -1,8 +1,23 @@
 'use client';
 
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginContent() {
+  const searchParams = useSearchParams();
+  const error = searchParams.get('error');
+
+  if (error === 'AccessDenied') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-red-600">
+        <div className="text-white text-center p-8">
+          <h1 className="text-3xl font-bold mb-4">Access Denied</h1>
+          <p className="text-lg">You are not allowed to access the admin panel.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
@@ -20,7 +35,6 @@ export default function LoginContent() {
             />
             Continue with Google
           </button>
-          
         </div>
       </div>
     </div>
